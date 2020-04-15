@@ -1,0 +1,1 @@
+include ':app', ':auth', ':authApi', ':common', ':navigation', ':names', ':namesApi', ':network', ':navigationmediator', ':partnersApi', ':partners', ':resultsApi', ':results'

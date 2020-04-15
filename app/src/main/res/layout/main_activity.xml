@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.MainActivity">
+
+    <TextView
+        android:id="@+id/userIdLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UserId"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/userIdView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/userIdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/authButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userIdLabel" />
+
+    <Button
+        android:id="@+id/authButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="Auth"
+        app:layout_constraintBottom_toTopOf="@id/partnerIdLabel"
+        app:layout_constraintTop_toBottomOf="@id/userIdView" />
+
+    <TextView
+        android:id="@+id/partnerIdLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="PartnersId"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/partnersIdView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/authButton" />
+
+    <TextView
+        android:id="@+id/partnersIdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/addPartnerButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/partnerIdLabel" />
+
+    <Button
+        android:id="@+id/addPartnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="Add partner"
+        app:layout_constraintBottom_toTopOf="@id/clearPartnersButton"
+        app:layout_constraintTop_toBottomOf="@id/partnersIdView" />
+
+    <Button
+        android:id="@+id/clearPartnersButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="Clear partners"
+        app:layout_constraintBottom_toTopOf="@id/viewPartnersQrCodeButton"
+        app:layout_constraintTop_toBottomOf="@id/addPartnerButton" />
+
+    <Button
+        android:id="@+id/viewPartnersQrCodeButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="View QR code"
+        app:layout_constraintBottom_toTopOf="@id/namesCountLabel"
+        app:layout_constraintTop_toBottomOf="@id/clearPartnersButton" />
+
+    <TextView
+        android:id="@+id/namesCountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Names starred"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/namesCountView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewPartnersQrCodeButton" />
+
+    <TextView
+        android:id="@+id/namesCountView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/namesButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/namesCountLabel" />
+
+    <Button
+        android:id="@+id/namesButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="Names"
+        app:layout_constraintBottom_toTopOf="@id/resultsButton"
+        app:layout_constraintTop_toBottomOf="@id/namesCountView" />
+
+    <Button
+        android:id="@+id/resultsButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="48dp"
+        android:background="@color/colorPrimary"
+        android:text="Results"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/namesButton" />
+
+    <FrameLayout
+        android:id="@+id/fragmentHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="2dp"
+        tools:ignore="UnusedAttribute" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

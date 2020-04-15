@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "299107128220",
+    "firebase_url": "https://babyname-df4d8.firebaseio.com",
+    "project_id": "babyname-df4d8",
+    "storage_bucket": "babyname-df4d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299107128220:android:4ed6d2f54fa93474",
+        "android_client_info": {
+          "package_name": "ru.drrey.babyname"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299107128220-q73pbql50am3hfc1ejt2jpird83sc554.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.drrey.babyname",
+            "certificate_hash": "bd30d5268a2e22946d5c493467ff25a37fe54b4f"
+          }
+        },
+        {
+          "client_id": "299107128220-onb13sls0ivqdoa1s4mdt4fqv2cp22mi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcRvu8_PxwCw_ETol6jQ3ByN3mtxIHjvs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299107128220-onb13sls0ivqdoa1s4mdt4fqv2cp22mi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

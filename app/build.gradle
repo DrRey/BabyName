@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+apply from: '../base-build.gradle'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    defaultConfig {
+        applicationId "ru.drrey.babyname"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 2
+        versionName "0.1.1"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation project(path: ':navigation')
+    implementation project(path: ':navigationmediator')
+    implementation project(path: ':common')
+    implementation project(path: ':auth')
+    implementation project(path: ':authApi')
+    implementation project(path: ':names')
+    implementation project(path: ':namesApi')
+    implementation project(path: ':partners')
+    implementation project(path: ':partnersApi')
+    implementation project(path: ':results')
+    implementation project(path: ':resultsApi')
+}
+
+apply plugin: 'com.google.gms.google-services'

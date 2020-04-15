@@ -1,0 +1,19 @@
+apply plugin: 'com.android.library'
+
+apply from: '../base-build.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    implementation 'com.google.android.gms:play-services-vision:20.0.0'
+    implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.3'
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+
+    implementation project(path: ':common')
+    implementation project(path: ':navigation')
+    implementation project(path: ':navigationmediator')
+    implementation project(path: ':authApi')
+    implementation project(path: ':namesApi')
+    implementation project(path: ':partnersApi')
+    implementation project(path: ':resultsApi')
+}

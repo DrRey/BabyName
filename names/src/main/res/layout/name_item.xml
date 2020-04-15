@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <TextView
+        android:id="@+id/nameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/star1View"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintRight_toLeftOf="@id/star2View" />
+
+    <TextView
+        android:id="@+id/star2View"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintRight_toLeftOf="@id/star3View" />
+
+    <TextView
+        android:id="@+id/star3View"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintRight_toLeftOf="@id/star4View" />
+
+    <TextView
+        android:id="@+id/star4View"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="4"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintRight_toLeftOf="@id/star5View" />
+
+    <TextView
+        android:id="@+id/star5View"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
