@@ -1,9 +1,8 @@
 package ru.drrey.babyname.auth.domain.repository
 
-import io.reactivex.Completable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-    fun setUserId(userId: String): Completable
-    fun getUserId(): Single<String>
+    fun setUserId(userId: String): Flow<Void>
+    fun getUserId(): Flow<String>
 }

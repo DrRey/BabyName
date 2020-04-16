@@ -1,27 +1,25 @@
 package ru.drrey.babyname.partners.domain.interactor
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import ru.drrey.babyname.common.domain.executor.PostExecutionThread
-import ru.drrey.babyname.common.domain.executor.ThreadExecutor
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
 import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 
 /**
  * Clear partners interactor
  */
+@ExperimentalCoroutinesApi
 class ClearPartnersInteractor(
     private val partnersRepository: PartnersRepository,
-    private val getUserId: () -> Single<String>,
-    threadExecutor: ThreadExecutor,
-    postExecutionThread: PostExecutionThread
-) : BaseInteractor<Void, Void?>(threadExecutor, postExecutionThread) {
+    private val getUserId: () -> Flow<String>
+) : BaseInteractor<Nothing, Void?>() {
 
-    override fun buildUseCaseObservable(params: Void?): Observable<Void> {
-        return getUserId().flatMapCompletable { userId ->
-            partnersRepository.getPartnersList(userId).flatMapCompletable { partnerIds ->
+    override fun buildFlow(params: Void?): Flow<Nothing> {
+        return getUserId().flatMapLatest { userId ->
+            partnersRepository.getPartnersList(userId).flatMapLatest { partnerIds ->
                 partnersRepository.clearPartners(userId, partnerIds)
             }
-        }.toObservable()
+        }
     }
 }

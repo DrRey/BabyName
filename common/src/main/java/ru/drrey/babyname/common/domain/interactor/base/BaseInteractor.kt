@@ -1,54 +1,55 @@
 package ru.drrey.babyname.common.domain.interactor.base
 
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
-import ru.drrey.babyname.common.domain.executor.PostExecutionThread
-import ru.drrey.babyname.common.domain.executor.ThreadExecutor
+import android.util.Log
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
 
 
 /**
  * Base interactor class. Thread executor and post execution thread are injected.
  * Provides observable execution and dispose methods.
  */
-abstract class BaseInteractor<T, in Params>(
-    private val threadExecutor: ThreadExecutor,
-    private val postExecutionThread: PostExecutionThread
-) {
-    private val disposables: CompositeDisposable = CompositeDisposable()
+abstract class BaseInteractor<T, in Params> {
+    private var currentJob: Job? = null
 
-
-    abstract fun buildUseCaseObservable(params: Params): Observable<T>
+    abstract fun buildFlow(params: Params): Flow<T>
 
     /**
      * Executes the current use case.
-     * @param observer [DisposableObserver] which will be listening to the observable build
-     * * by [.buildUseCaseObservable] ()} method.
+     * @param collector
      * *
      * @param params Parameters (Optional) used to build/execute this use case.
      */
-    fun execute(params: Params, observer: DisposableObserver<T>) {
-        val observable = this.buildUseCaseObservable(params)
-            .subscribeOn(Schedulers.from(threadExecutor))
-            .observeOn(postExecutionThread.scheduler)
-        addDisposable(observable.subscribeWith(observer))
-    }
-
-    /**
-     * Dispose from current [CompositeDisposable].
-     */
-    fun dispose() {
-        if (!disposables.isDisposed) {
-            disposables.dispose()
+    @ExperimentalCoroutinesApi
+    fun execute(
+        scope: CoroutineScope,
+        params: Params,
+        onError: ((Exception) -> Unit)? = null,
+        onCompletion: (() -> Unit)? = null,
+        collector: (T) -> Unit
+    ) {
+        currentJob?.cancel()
+        val flow = buildFlow(params).flowOn(Dispatchers.Default).conflate()
+        currentJob = scope.launch {
+            try {
+                flow.collect { collector.invoke(it) }
+            } catch (e: Exception) {
+                Log.d("Interactor onError", e.toString())
+                onError?.invoke(e)
+            }
+            onCompletion?.invoke()
         }
     }
 
     /**
-     * Dispose from current [CompositeDisposable].
+     * Cancel current [Job].
      */
-    private fun addDisposable(disposable: Disposable) {
-        disposables.add(disposable)
+    fun dispose() {
+        if (currentJob?.isActive == true) {
+            currentJob?.cancel()
+        }
     }
 }

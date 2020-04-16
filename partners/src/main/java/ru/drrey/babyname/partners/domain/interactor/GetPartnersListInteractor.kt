@@ -1,9 +1,8 @@
 package ru.drrey.babyname.partners.domain.interactor
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import ru.drrey.babyname.common.domain.executor.PostExecutionThread
-import ru.drrey.babyname.common.domain.executor.ThreadExecutor
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
 import ru.drrey.babyname.partners.domain.entity.Partner
 import ru.drrey.babyname.partners.domain.repository.PartnersRepository
@@ -11,16 +10,15 @@ import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 /**
  * Get partners list interactor
  */
+@ExperimentalCoroutinesApi
 class GetPartnersListInteractor(
     private val partnersRepository: PartnersRepository,
-    private val getUserId: () -> Single<String>,
-    threadExecutor: ThreadExecutor,
-    postExecutionThread: PostExecutionThread
-) : BaseInteractor<List<Partner>, Void?>(threadExecutor, postExecutionThread) {
+    private val getUserId: () -> Flow<String>
+) : BaseInteractor<List<Partner>, Void?>() {
 
-    override fun buildUseCaseObservable(params: Void?): Observable<List<Partner>> {
-        return getUserId().flatMap { userId ->
+    override fun buildFlow(params: Void?): Flow<List<Partner>> {
+        return getUserId().flatMapLatest { userId ->
             partnersRepository.getPartnersList(userId)
-        }.toObservable()
+        }
     }
 }

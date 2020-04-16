@@ -3,7 +3,6 @@ package ru.drrey.babyname.network
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -26,7 +25,6 @@ class RestClient {
             .client(client)
             // .baseUrl(GoodGameApp.getContext().getString(R.string.gg_api_url))
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
         nameService = retrofit.create(NameApi::class.java)

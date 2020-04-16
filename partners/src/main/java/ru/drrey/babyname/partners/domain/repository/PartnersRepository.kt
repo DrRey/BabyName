@@ -1,7 +1,6 @@
 package ru.drrey.babyname.partners.domain.repository
 
-import io.reactivex.Completable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import ru.drrey.babyname.common.domain.entity.NameStars
 import ru.drrey.babyname.partners.domain.entity.Partner
 
@@ -9,8 +8,8 @@ import ru.drrey.babyname.partners.domain.entity.Partner
  * Partners repository
  */
 interface PartnersRepository {
-    fun clearPartners(userId: String, partners: List<Partner>): Completable
-    fun addPartner(userId: String, partnerId: String): Completable
-    fun getPartnersList(userId: String): Single<List<Partner>>
-    fun getPartnersStars(partnerIds: List<String>): Single<Map<String, List<NameStars>>>
+    fun clearPartners(userId: String, partners: List<Partner>): Flow<Nothing>
+    fun addPartner(userId: String, partnerId: String): Flow<Nothing>
+    fun getPartnersList(userId: String): Flow<List<Partner>>
+    fun getPartnersStars(partnerIds: List<String>): Flow<Map<String, List<NameStars>>>
 }
