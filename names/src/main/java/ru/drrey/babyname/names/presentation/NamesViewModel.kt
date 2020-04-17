@@ -20,12 +20,6 @@ class NamesViewModel(
         }
     }
 
-    override fun onCleared() {
-        getNamesWithStarsInteractor.dispose()
-        setStarsInteractor.dispose()
-        super.onCleared()
-    }
-
     fun getState(): LiveData<NamesState> = state
 
     fun loadNames() {

@@ -19,12 +19,6 @@ class PartnersViewModel(
         }
     }
 
-    override fun onCleared() {
-        getUserIdInteractor.dispose()
-        addPartnerInteractor.dispose()
-        super.onCleared()
-    }
-
     fun getState(): LiveData<PartnersState> = state
 
     fun loadUserData() {

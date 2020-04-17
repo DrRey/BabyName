@@ -17,11 +17,6 @@ class ResultsViewModel(
         }
     }
 
-    override fun onCleared() {
-        getResultsInteractor.dispose()
-        super.onCleared()
-    }
-
     fun getState(): LiveData<ResultsState> = state
 
     fun loadResults() {

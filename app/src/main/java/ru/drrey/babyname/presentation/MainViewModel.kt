@@ -20,14 +20,6 @@ class MainViewModel(
         }
     }
 
-    override fun onCleared() {
-        getUserIdInteractor.dispose()
-        getPartnerIdsListInteractor.dispose()
-        clearPartnersInteractor.dispose()
-        getStarredNamesInteractor.dispose()
-        super.onCleared()
-    }
-
     fun getState(): LiveData<MainState> = state
 
     fun loadData() {
