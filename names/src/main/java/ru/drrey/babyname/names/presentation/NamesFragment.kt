@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.names_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.names.R
 
 @ExperimentalCoroutinesApi
@@ -23,6 +25,7 @@ class NamesFragment : Fragment() {
     }
 
     private val namesAdapter = GroupAdapter<ViewHolder>()
+    private val namesSection = Section()
     private val viewModel: NamesViewModel by viewModel()
 
     override fun onCreateView(
@@ -40,36 +43,36 @@ class NamesFragment : Fragment() {
             adapter = namesAdapter
             addItemDecoration(VerticalSpaceDivider(context))
         }
+        namesAdapter.add(namesSection)
 
-        viewModel.getState().observe(viewLifecycleOwner, Observer {
-            when (it) {
-                NamesNotLoaded -> {
-
-                }
-                NamesLoading -> {
-
-                }
-                is NamesLoaded -> {
-                    namesAdapter.clear()
-                    it.names.forEach { name ->
-                        namesAdapter.add(NameItem(name) { starredName, position, stars ->
-                            viewModel.setStars(starredName, position, stars)
-                        })
-                    }
-                }
-                is NamesLoadError -> {
-                    namesAdapter.clear()
-                }
-                is SetStarsError -> {
-                    (namesAdapter.getItem(it.position) as? NameItem)?.name?.stars = null
-                    namesAdapter.notifyItemChanged(it.position)
-                }
-                is SetStarsSuccess -> {
-                    (namesAdapter.getItem(it.position) as? NameItem)?.name?.stars = it.stars
-                    namesAdapter.notifyItemChanged(it.position)
-                }
-            }
+        viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderState(it)
+        })
+        viewModel.getViewEvent().observe(viewLifecycleOwner, NonNullObserver {
+            actOnEvent(it)
         })
         viewModel.loadNames()
+    }
+
+    private fun renderState(viewState: NamesViewState) {
+        if (viewState.loadError != null) {
+            namesSection.update(emptyList())
+        } else {
+            viewState.names?.let {
+                namesSection.update(it.map { name ->
+                    NameItem(name) { starredName, position, stars ->
+                        viewModel.setStars(starredName, position, stars)
+                    }
+                })
+            }
+        }
+    }
+
+    private fun actOnEvent(viewEvent: NamesViewEvent) {
+        when (viewEvent) {
+            is NamesViewEvent.StarsSetError -> {
+                Toast.makeText(context, viewEvent.error, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

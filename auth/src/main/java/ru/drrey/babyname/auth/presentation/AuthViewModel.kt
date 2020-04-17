@@ -47,7 +47,7 @@ class AuthViewModel(
     }
 
     fun onAuthError(t: Throwable?) {
-        act(AuthStateAction.AuthError(t?.message))
+        act(AuthStateAction.AuthError(t?.message ?: ""))
     }
 
     private fun reduceAuthViewState(viewState: AuthViewState, action: Action): AuthViewState {
@@ -86,7 +86,7 @@ class AuthViewModel(
 
     sealed class AuthStateAction : Action {
         object AuthLoadStarted : AuthStateAction()
-        class AuthError(val message: String?) : AuthStateAction()
+        class AuthError(val message: String) : AuthStateAction()
         class AuthComplete(val userId: String) : AuthStateAction()
         object AuthNone : AuthStateAction()
     }
