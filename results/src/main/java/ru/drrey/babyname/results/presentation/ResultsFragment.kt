@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.results_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +24,7 @@ class ResultsFragment : Fragment() {
     }
 
     private val resultsAdapter = GroupAdapter<ViewHolder>()
+    private val resultsSection = Section()
     private val viewModel: ResultsViewModel by viewModel()
 
     override fun onCreateView(
@@ -40,26 +42,21 @@ class ResultsFragment : Fragment() {
             adapter = resultsAdapter
             addItemDecoration(VerticalSpaceDivider(context))
         }
+        resultsAdapter.add(resultsSection)
 
-        viewModel.getState().observe(viewLifecycleOwner, Observer {
-            when (it) {
-                ResultsNotLoaded -> {
-
-                }
-                ResultsLoading -> {
-
-                }
-                is ResultsLoaded -> {
-                    resultsAdapter.clear()
-                    it.results.forEach { result ->
-                        resultsAdapter.add(ResultItem(result))
-                    }
-                }
-                is ResultsLoadError -> {
-                    resultsAdapter.clear()
-                }
-            }
+        viewModel.getViewState().observe(viewLifecycleOwner, Observer {
+            renderState(it)
         })
         viewModel.loadResults()
+    }
+
+    private fun renderState(viewState: ResultsViewState) {
+        if (viewState.error != null) {
+            resultsSection.update(emptyList())
+        } else {
+            viewState.results?.let {
+                resultsSection.update(it.map { result -> ResultItem(result) })
+            }
+        }
     }
 }
