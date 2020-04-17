@@ -1,13 +1,13 @@
 package ru.drrey.babyname.presentation
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.FeatureStarter
 import ru.drrey.babyname.R
 import ru.drrey.babyname.common.presentation.base.BaseActivity
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.navigation.*
 import ru.terrakok.cicerone.Navigator
 
@@ -35,28 +35,15 @@ class MainActivity : BaseActivity() {
         namesButton.setOnClickListener { (router as? AppRouter)?.startFlow(NamesFlow) }
         resultsButton.setOnClickListener { (router as? AppRouter)?.startFlow(ResultsFlow) }
 
-        viewModel.getState().observe(this, Observer {
-            when (it) {
-                NotLoaded -> {
-                    userIdView.text = ""
-                    partnersIdView.text = ""
-                    namesCountView.text = ""
-                }
-                Loading -> {
-
-                }
-                is Loaded -> {
-                    userIdView.text = it.userId
-                    partnersIdView.text = it.partnerIds.joinToString(separator = "\n")
-                    namesCountView.text = it.starredNames.toString()
-                }
-                is LoadError -> {
-                    userIdView.text = it.userId ?: ""
-                    partnersIdView.text = it.partnerIds?.joinToString(separator = "\n") ?: ""
-                    namesCountView.text = it.starredNames?.toString() ?: ""
-                }
-            }
+        viewModel.getViewState().observe(this, NonNullObserver {
+            renderState(it)
         })
+    }
+
+    private fun renderState(viewState: MainViewState) {
+        userIdView.text = viewState.userId ?: ""
+        partnersIdView.text = viewState.partnerIds?.joinToString(separator = "\n") ?: ""
+        namesCountView.text = viewState.starredNamesCount?.toString() ?: ""
     }
 
     override fun onResume() {
