@@ -3,6 +3,7 @@ package ru.drrey.babyname.di
 import android.content.Context
 import android.preference.PreferenceManager
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.drrey.babyname.BabyNameApp
@@ -12,6 +13,7 @@ import ru.drrey.babyname.navigationmediator.FeatureProvider
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 
+@ExperimentalCoroutinesApi
 object AppComponent {
     fun init() = loadKoinModules(
         listOf(

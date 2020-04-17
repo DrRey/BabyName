@@ -15,6 +15,7 @@ class PartnersQrCodeScreen : AppScreen() {
     }
 }
 
+@ExperimentalCoroutinesApi
 class AddPartnerScreen : AppScreen() {
     override fun getActivityIntent(context: Context): Intent? {
         return Intent(context, AddPartnerActivity::class.java)
