@@ -2,13 +2,14 @@ package ru.drrey.babyname.partners.presentation
 
 import android.os.Bundle
 import android.util.SparseArray
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
 import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.common.presentation.base.BaseActivity
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.navigation.AppNavigator
 import ru.drrey.babyname.partners.R
 import ru.terrakok.cicerone.Navigator
@@ -25,21 +26,12 @@ class AddPartnerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_partner_activity)
-        viewModel.getState().observe(this, Observer {
+        viewModel.getViewEvent().observe(this, NonNullObserver {
             when (it) {
-                Initial -> {
-
+                is PartnersViewEvent.PartnerAddError -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
-                is GetUserError -> {
-
-                }
-                is GetUserSuccess -> {
-
-                }
-                is PartnerAddError -> {
-
-                }
-                PartnerAddSuccess -> {
+                PartnersViewEvent.PartnerAdded -> {
                     finish()
                 }
             }

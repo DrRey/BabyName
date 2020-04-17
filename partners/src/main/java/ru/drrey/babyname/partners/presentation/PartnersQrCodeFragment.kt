@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.partners_qr_code_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.partners.R
 
 
@@ -34,27 +35,19 @@ class PartnersQrCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getState().observe(viewLifecycleOwner, Observer {
-            when (it) {
-                Initial -> {
-
-                }
-                is GetUserError -> {
-
-                }
-                is GetUserSuccess -> {
-                    showQrCode(it.userId)
-                }
-                is PartnerAddError -> {
-
-                }
-                PartnerAddSuccess -> {
-
-                }
-            }
+        viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderState(it)
         })
 
         viewModel.loadUserData()
+    }
+
+    private fun renderState(viewState: PartnersViewState) {
+        if (viewState.loadUserError != null) {
+            Toast.makeText(context, viewState.loadUserError, Toast.LENGTH_SHORT).show()
+        } else {
+            viewState.userId?.let { userId -> showQrCode(userId) }
+        }
     }
 
     private fun showQrCode(userId: String) {
