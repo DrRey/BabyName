@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
 import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.common.presentation.base.BaseActivity
 import ru.drrey.babyname.navigation.AppNavigator
@@ -14,6 +15,7 @@ import ru.terrakok.cicerone.Navigator
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever
 
 
+@ExperimentalCoroutinesApi
 class AddPartnerActivity : BaseActivity() {
     override val navigator: Navigator
         get() = AppNavigator(this, R.id.parentLayout)

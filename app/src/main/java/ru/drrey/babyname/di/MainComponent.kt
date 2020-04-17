@@ -1,5 +1,6 @@
 package ru.drrey.babyname.di
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
@@ -8,6 +9,7 @@ import ru.drrey.babyname.names.api.NamesApi
 import ru.drrey.babyname.partners.api.PartnersApi
 import ru.drrey.babyname.presentation.MainViewModel
 
+@ExperimentalCoroutinesApi
 object MainComponent : FeatureComponent<MainDependencies>() {
 
     private val mainDependenciesModule = module {

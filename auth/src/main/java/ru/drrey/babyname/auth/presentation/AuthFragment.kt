@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.auth.R
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 
 const val RC_SIGN_IN = 111
 
@@ -31,35 +31,30 @@ class AuthFragment : Fragment() {
         return inflater.inflate(R.layout.auth_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        authViewModel.getState().observe(viewLifecycleOwner, Observer {
-            when (it) {
-                AuthUndefined -> {
-                    authViewModel.loadAuth()
-                }
-                AuthLoading -> {
-
-                }
-                AuthNone -> {
-                    val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-                    startActivityForResult(
-                        AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(providers)
-                            .build(),
-                        RC_SIGN_IN
-                    )
-                }
-                is AuthError -> {
-                    Toast.makeText(context!!, it.message ?: "Auth error", Toast.LENGTH_LONG).show()
-                }
-                is AuthComplete -> {
-                    Toast.makeText(context!!, it.userId, Toast.LENGTH_LONG).show()
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        authViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderState(it)
         })
+    }
+
+    private fun renderState(viewState: AuthViewState) {
+        if (!viewState.isLoading && !viewState.isLoaded && viewState.error == null && viewState.userId == null) {
+            authViewModel.loadAuth()
+        } else if (!viewState.isLoading && viewState.isLoaded && viewState.error == null && viewState.userId == null) {
+            val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build(),
+                RC_SIGN_IN
+            )
+        } else if (!viewState.isLoading && viewState.isLoaded && viewState.error != null) {
+            Toast.makeText(context!!, viewState.error, Toast.LENGTH_LONG).show()
+        } else if (!viewState.isLoading && viewState.isLoaded && viewState.error == null && viewState.userId != null) {
+            Toast.makeText(context!!, viewState.userId, Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

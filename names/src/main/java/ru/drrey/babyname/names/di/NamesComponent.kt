@@ -1,5 +1,6 @@
 package ru.drrey.babyname.names.di
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
@@ -17,6 +18,7 @@ import ru.drrey.babyname.names.navigation.NamesFlowScreenProviderImpl
 import ru.drrey.babyname.names.presentation.NamesViewModel
 import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
+@ExperimentalCoroutinesApi
 object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     override fun countStarredNamesInteractor(): BaseInteractor<Int, Void?> =
         get<CountStarredNamesInteractor>()
@@ -43,29 +45,23 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     }
 
     private val namesInteractorModule = module {
-        factory { GetNamesInteractor(get(), get(), get()) }
+        factory { GetNamesInteractor(get()) }
         factory {
             GetNamesWithStarsInteractor(
                 get(),
-                get<NamesDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<NamesDependencies>().authApi::getUserId
             )
         }
         factory {
             CountStarredNamesInteractor(
                 get(),
-                get<NamesDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<NamesDependencies>().authApi::getUserId
             )
         }
         factory {
             SetStarsInteractor(
                 get(),
-                get<NamesDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<NamesDependencies>().authApi::getUserId
             )
         }
     }

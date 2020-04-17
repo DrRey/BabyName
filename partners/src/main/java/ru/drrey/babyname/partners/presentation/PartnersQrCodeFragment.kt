@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.partners_qr_code_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.partners.R
 
 
+@ExperimentalCoroutinesApi
 class PartnersQrCodeFragment : Fragment() {
 
     companion object {

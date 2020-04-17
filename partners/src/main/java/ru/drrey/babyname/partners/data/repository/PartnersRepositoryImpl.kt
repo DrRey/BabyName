@@ -47,7 +47,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 }
             awaitClose { cancel() }
         }.flatMapLatest {
-            callbackFlow {
+            callbackFlow<Nothing> {
                 db.collection("partners_$partnerId").document(userId).set(Partner(userId))
                     .addOnSuccessListener {
                         close()

@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.names_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.names.R
 
+@ExperimentalCoroutinesApi
 class NamesFragment : Fragment() {
 
     companion object {

@@ -9,8 +9,6 @@ abstract class FeatureModuleProvider {
     open val modules: List<Module> = emptyList()
 }
 
-abstract class FeatureCoreComponent : FeatureModuleProvider()
-
 interface FeatureDependencies : KoinComponent
 
 abstract class FeatureComponent<T : FeatureDependencies> : KoinComponent, FeatureModuleProvider() {

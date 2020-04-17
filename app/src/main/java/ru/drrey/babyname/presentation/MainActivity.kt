@@ -3,6 +3,7 @@ package ru.drrey.babyname.presentation
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.FeatureStarter
 import ru.drrey.babyname.R
@@ -10,6 +11,7 @@ import ru.drrey.babyname.common.presentation.base.BaseActivity
 import ru.drrey.babyname.navigation.*
 import ru.terrakok.cicerone.Navigator
 
+@ExperimentalCoroutinesApi
 class MainActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModel()
 

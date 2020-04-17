@@ -1,10 +1,10 @@
 package ru.drrey.babyname.auth.presentation
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.auth.R
 import ru.drrey.babyname.common.presentation.base.BaseActivity
+import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.navigation.AppNavigator
 import ru.terrakok.cicerone.Navigator
 
@@ -23,8 +23,8 @@ class AuthActivity : BaseActivity() {
                 .commitNow()
         }
 
-        authViewModel.getState().observe(this, Observer {
-            if (it is AuthComplete) {
+        authViewModel.getViewState().observe(this, NonNullObserver {
+            if (!it.isLoading && it.isLoaded && it.userId != null) {
                 finish()
             }
         })

@@ -1,6 +1,8 @@
 package ru.drrey.babyname.partners.di
 
-import io.reactivex.Single
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
@@ -19,6 +21,7 @@ import ru.drrey.babyname.partners.navigation.AddPartnerFlowScreenProviderImpl
 import ru.drrey.babyname.partners.navigation.PartnersQrCodeFlowScreenProviderImpl
 import ru.drrey.babyname.partners.presentation.PartnersViewModel
 
+@ExperimentalCoroutinesApi
 object PartnersComponent : FeatureComponent<PartnersDependencies>(), PartnersApi {
     override fun getPartnersQrCodeFlowScreenProvider() = get<PartnersQrCodeFlowScreenProvider>()
     override fun getAddPartnersFlowScreenProvider() = get<AddPartnerFlowScreenProvider>()
@@ -26,7 +29,7 @@ object PartnersComponent : FeatureComponent<PartnersDependencies>(), PartnersApi
     override fun clearPartnersInteractor() = get<ClearPartnersInteractor>()
     override fun getPartnerIdsListInteractor() = get<GetPartnerIdsListInteractor>()
 
-    override fun getPartnerIds(userId: String): Single<List<String>> =
+    override fun getPartnerIds(userId: String): Flow<List<String>> =
         getKoin().get<PartnersRepository>().getPartnersList(userId)
             .map { it.map { partner -> partner.id } }
 
@@ -56,33 +59,25 @@ object PartnersComponent : FeatureComponent<PartnersDependencies>(), PartnersApi
         factory {
             ClearPartnersInteractor(
                 get(),
-                get<PartnersDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<PartnersDependencies>().authApi::getUserId
             )
         }
         factory {
             AddPartnerInteractor(
                 get(),
-                get<PartnersDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<PartnersDependencies>().authApi::getUserId
             )
         }
         factory {
             GetPartnersListInteractor(
                 get(),
-                get<PartnersDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<PartnersDependencies>().authApi::getUserId
             )
         }
         factory {
             GetPartnerIdsListInteractor(
                 get(),
-                get<PartnersDependencies>().authApi::getUserId,
-                get(),
-                get()
+                get<PartnersDependencies>().authApi::getUserId
             )
         }
     }

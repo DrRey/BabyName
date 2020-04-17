@@ -1,5 +1,6 @@
 package ru.drrey.babyname
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.core.KoinComponent
 import org.koin.core.get
 import org.koin.core.parameter.parametersOf
@@ -15,6 +16,7 @@ import ru.drrey.babyname.results.ResultsComponent
 import ru.drrey.babyname.results.api.ResultsApi
 import kotlin.reflect.KClass
 
+@ExperimentalCoroutinesApi
 object FeatureStarter : FeatureProvider, KoinComponent {
     override val authFlowScreenProvider: AuthFlowScreenProvider
         get() = getAuthFeature().getFlowScreenProvider()

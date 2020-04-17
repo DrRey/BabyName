@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.results_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.results.R
 
+@ExperimentalCoroutinesApi
 class ResultsFragment : Fragment() {
 
     companion object {

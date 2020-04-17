@@ -3,10 +3,11 @@ package ru.drrey.babyname.results.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.drrey.babyname.common.presentation.base.InteractorObserver
-import ru.drrey.babyname.results.domain.entity.Result
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.drrey.babyname.results.domain.interactor.GetResultsInteractor
 
+@ExperimentalCoroutinesApi
 class ResultsViewModel(
     private val getResultsInteractor: GetResultsInteractor
 ) : ViewModel() {
@@ -25,12 +26,12 @@ class ResultsViewModel(
 
     fun loadResults() {
         state.value = ResultsLoading
-        getResultsInteractor.execute(null, InteractorObserver<List<Result>>()
-            .onError {
-                state.value = ResultsLoadError(it, it.message)
-            }
-            .onNext {
-                state.value = ResultsLoaded(it)
-            })
+        getResultsInteractor.execute(
+            viewModelScope,
+            null,
+            onError = { state.value = ResultsLoadError(it, it.message) })
+        {
+            state.value = ResultsLoaded(it)
+        }
     }
 }
