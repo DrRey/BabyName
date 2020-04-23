@@ -41,7 +41,9 @@ class NamesViewModel(
             SetStarsInteractor.Params(name, stars),
             onError = {
                 act(NamesStateAction.StarsSetError(it.message ?: ""))
-            }) { act(NamesStateAction.StarsSet(name, position, stars)) }
+            },
+            onCompletion = { act(NamesStateAction.StarsSet(name, position, stars)) },
+            collector = {})
     }
 
     private fun reduceNamesViewState(viewState: NamesViewState, action: Action): NamesViewState {
@@ -66,8 +68,11 @@ class NamesViewModel(
                 )
             }
             is NamesStateAction.StarsSet -> {
-                viewState.copy(names = viewState.names?.apply {
-                    getOrNull(action.position)?.stars = action.stars
+                viewState.copy(names = viewState.names?.toMutableList()?.apply {
+                    set(
+                        action.position,
+                        viewState.names[action.position].copy(stars = action.stars)
+                    )
                 })
             }
             else -> {

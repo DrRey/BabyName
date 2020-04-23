@@ -1,6 +1,6 @@
 package ru.drrey.babyname.names.domain.entity
 
-class Name(
+data class Name(
     val displayName: String = "",
     val description: String = "",
     val sex: String = "М",

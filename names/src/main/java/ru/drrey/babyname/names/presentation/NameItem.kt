@@ -46,4 +46,14 @@ class NameItem(val name: Name, private val onClickListener: (Name, Int, Int) -> 
             star5View.setOnClickListener { onClickListener.invoke(name, position, 5) }
         }
     }
+
+    override fun getId(): Long {
+        return name.hashCode().toLong()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return (other as? NameItem)?.let {
+            this.name == it.name
+        } ?: false
+    }
 }
