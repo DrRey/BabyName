@@ -11,5 +11,5 @@ interface PartnersRepository {
     fun clearPartners(userId: String, partners: List<Partner>): Flow<Nothing>
     fun addPartner(userId: String, partnerId: String): Flow<Nothing>
     fun getPartnersList(userId: String): Flow<List<Partner>>
-    fun getPartnersStars(partnerIds: List<String>): Flow<Map<String, List<NameStars>>>
+    fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>>
 }

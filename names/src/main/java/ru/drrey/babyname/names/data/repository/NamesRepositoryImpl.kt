@@ -15,6 +15,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             .addOnSuccessListener { names ->
                 try {
                     offer(names.toObjects(Name::class.java).toList())
+                    close()
                 } catch (e: Exception) {
                     close(e)
                 }
@@ -29,6 +30,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             .addOnSuccessListener { stars ->
                 try {
                     offer(stars.toObjects(NameStars::class.java).toList())
+                    close()
                 } catch (e: Exception) {
                     close(e)
                 }
@@ -56,6 +58,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         db.collection("filters_$userId").document("sex").get()
             .addOnSuccessListener { doc ->
                 offer((doc.get("sex") ?: "ALL").toString())
+                close()
             }.addOnFailureListener {
                 close(it)
             }

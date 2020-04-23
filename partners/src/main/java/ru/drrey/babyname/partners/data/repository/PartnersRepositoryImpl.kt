@@ -3,7 +3,10 @@ package ru.drrey.babyname.partners.data.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.merge
 import ru.drrey.babyname.common.domain.entity.NameStars
 import ru.drrey.babyname.partners.domain.entity.Partner
 import ru.drrey.babyname.partners.domain.repository.PartnersRepository
@@ -62,41 +65,34 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
             .addOnSuccessListener { partners ->
                 try {
                     offer(partners.toObjects(Partner::class.java).toList())
+                    close()
                 } catch (t: Throwable) {
                     close(t)
                 }
             }
             .addOnFailureListener {
                 offer(emptyList())
+                close()
             }
         awaitClose { cancel() }
     }
 
-    override fun getPartnersStars(partnerIds: List<String>): Flow<Map<String, List<NameStars>>> =
-        callbackFlow {
-            partnerIds.map { partnerId ->
-                callbackFlow<Pair<String, List<NameStars>>> {
-                    db.collection(partnerId).get()
-                        .addOnSuccessListener { stars ->
-                            try {
-                                offer(
-                                    Pair(
-                                        partnerId,
-                                        stars.toObjects(NameStars::class.java).toList()
-                                    )
-                                )
-                            } catch (t: Throwable) {
-                                close(t)
-                            }
+    override fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>> =
+        partnerIds.map { partnerId ->
+            callbackFlow<Pair<String, List<NameStars>>> {
+                db.collection(partnerId).get()
+                    .addOnSuccessListener { stars ->
+                        try {
+                            offer(Pair(partnerId, stars.toObjects(NameStars::class.java).toList()))
+                            close()
+                        } catch (t: Throwable) {
+                            close(t)
                         }
-                        .addOnFailureListener {
-                            offer(emptyMap())
-                        }
-                    awaitClose { cancel() }
-                }
-            }.merge().toList().run {
-                offer(associateBy({ it.first }, { it.second }))
+                    }
+                    .addOnFailureListener {
+                        close(it)
+                    }
+                awaitClose { cancel() }
             }
-            awaitClose { cancel() }
-        }
+        }.merge()
 }

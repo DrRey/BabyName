@@ -39,7 +39,7 @@ abstract class BaseInteractor<T, in Params> {
             try {
                 flow.collect { collector.invoke(it) }
             } catch (e: Exception) {
-                Log.d("Interactor onError", e.toString())
+                Log.e("Interactor onError", e.toString())
                 onError?.invoke(e)
             }
             onCompletion?.invoke()

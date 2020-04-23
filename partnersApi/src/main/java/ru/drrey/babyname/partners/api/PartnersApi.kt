@@ -12,5 +12,5 @@ interface PartnersApi {
     fun clearPartnersInteractor(): BaseInteractor<Nothing, Void?>
     fun getPartnerIdsListInteractor(): BaseInteractor<List<String>, Void?>
     fun getPartnerIds(userId: String): Flow<List<String>>
-    fun getPartnersStars(partnerIds: List<String>): Flow<Map<String, List<NameStars>>>
+    fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>>
 }
