@@ -1,6 +1,5 @@
 package ru.drrey.babyname.partners.di
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,7 +20,6 @@ import ru.drrey.babyname.partners.navigation.AddPartnerFlowScreenProviderImpl
 import ru.drrey.babyname.partners.navigation.PartnersQrCodeFlowScreenProviderImpl
 import ru.drrey.babyname.partners.presentation.PartnersViewModel
 
-@ExperimentalCoroutinesApi
 object PartnersComponent : FeatureComponent<PartnersDependencies>(), PartnersApi {
     override fun getPartnersQrCodeFlowScreenProvider() = get<PartnersQrCodeFlowScreenProvider>()
     override fun getAddPartnersFlowScreenProvider() = get<AddPartnerFlowScreenProvider>()
@@ -47,12 +45,12 @@ object PartnersComponent : FeatureComponent<PartnersDependencies>(), PartnersApi
     }
 
     private val partnersNavigationModule = module {
-        single { PartnersQrCodeFlowScreenProviderImpl() }
-        single { AddPartnerFlowScreenProviderImpl() }
+        single<PartnersQrCodeFlowScreenProvider> { PartnersQrCodeFlowScreenProviderImpl() }
+        single<AddPartnerFlowScreenProvider> { AddPartnerFlowScreenProviderImpl() }
     }
 
     private val partnersRepositoryModule = module {
-        single { PartnersRepositoryImpl(get()) }
+        single<PartnersRepository> { PartnersRepositoryImpl(get()) }
     }
 
     private val partnersInteractorModule = module {

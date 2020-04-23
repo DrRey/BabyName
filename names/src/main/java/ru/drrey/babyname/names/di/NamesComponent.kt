@@ -1,6 +1,5 @@
 package ru.drrey.babyname.names.di
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
@@ -18,7 +17,6 @@ import ru.drrey.babyname.names.navigation.NamesFlowScreenProviderImpl
 import ru.drrey.babyname.names.presentation.NamesViewModel
 import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
-@ExperimentalCoroutinesApi
 object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     override fun countStarredNamesInteractor(): BaseInteractor<Int, Void?> =
         get<CountStarredNamesInteractor>()
@@ -37,11 +35,11 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     }
 
     private val namesNavigationModule = module {
-        single { NamesFlowScreenProviderImpl() }
+        single<NamesFlowScreenProvider> { NamesFlowScreenProviderImpl() }
     }
 
     private val namesRepositoryModule = module {
-        single { NamesRepositoryImpl(get()) }
+        single<NamesRepository> { NamesRepositoryImpl(get()) }
     }
 
     private val namesInteractorModule = module {

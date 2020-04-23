@@ -9,14 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.results_fragment.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_results.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.results.R
 
-@ExperimentalCoroutinesApi
 class ResultsFragment : Fragment() {
 
     companion object {
@@ -25,13 +23,13 @@ class ResultsFragment : Fragment() {
 
     private val resultsAdapter = GroupAdapter<ViewHolder>()
     private val resultsSection = Section()
-    private val viewModel: ResultsViewModel by viewModel()
+    private val viewModel: ResultsViewModel by sharedViewModel(from = { parentFragment!! })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.results_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_results, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

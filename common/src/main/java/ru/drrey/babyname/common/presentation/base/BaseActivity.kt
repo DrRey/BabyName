@@ -1,23 +1,65 @@
 package ru.drrey.babyname.common.presentation.base
 
+import android.content.Intent
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import org.koin.android.ext.android.inject
-import ru.terrakok.cicerone.Navigator
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
+import org.koin.core.parameter.parametersOf
+import ru.drrey.babyname.common.R
+import ru.drrey.babyname.common.presentation.getChildFragmentOrItself
+import ru.drrey.babyname.common.presentation.router
+import ru.drrey.babyname.navigation.AppNavigator
+import ru.drrey.babyname.navigation.Router
+import ru.drrey.babyname.navigation.RouterProvider
+import ru.terrakok.cicerone.Cicerone
+import kotlin.reflect.KClass
 
-abstract class BaseActivity : FragmentActivity() {
-    abstract val navigator: Navigator
-    private val navigatorHolder: NavigatorHolder by inject()
-    protected val router: Router by inject()
+abstract class BaseActivity : FragmentActivity(), RouterProvider {
+    override val router: Router by inject()
+    val cicerone: Cicerone<Router> by inject { parametersOf("") }
+    private val navigator: AppNavigator by lazy { initNavigator() }
 
-    override fun onResume() {
-        super.onResume()
-        navigatorHolder.setNavigator(navigator)
+    protected open val featureDependencies: List<KClass<*>> = emptyList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        //preparing dependencies
+        featureDependencies.forEach { router.prepareFeature(it) }
+        super.onCreate(savedInstanceState)
+    }
+
+    protected open fun initNavigator(): AppNavigator =
+        AppNavigator(this, supportFragmentManager, R.id.fragmentHolder)
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        cicerone.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
-        navigatorHolder.removeNavigator()
+        cicerone.navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    override fun onBackPressed() {
+        val currentFragment = getCurrentFragment()
+        if (currentFragment is OnBackButtonPressedProviderFragment) {
+            currentFragment.onBackButtonPressed()
+        } else {
+            currentFragment?.router?.exit() ?: router.exit()
+        }
+    }
+
+    /**
+     * Searches for the currently visible fragment.
+     * Returns the current visible fragment or its child.
+     */
+    private fun getCurrentFragment(): Fragment? =
+        supportFragmentManager.findFragmentById(R.id.fragmentHolder)?.getChildFragmentOrItself()
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
+        currentFragment?.onActivityResult(requestCode, resultCode, data)
     }
 }

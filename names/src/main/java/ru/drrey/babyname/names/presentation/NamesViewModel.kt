@@ -4,13 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.names.domain.entity.Name
 import ru.drrey.babyname.names.domain.interactor.GetNamesWithStarsInteractor
 import ru.drrey.babyname.names.domain.interactor.SetStarsInteractor
 
-@ExperimentalCoroutinesApi
 class NamesViewModel(
     private val getNamesWithStarsInteractor: GetNamesWithStarsInteractor,
     private val setStarsInteractor: SetStarsInteractor

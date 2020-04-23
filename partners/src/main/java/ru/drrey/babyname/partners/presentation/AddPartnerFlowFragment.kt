@@ -2,43 +2,41 @@ package ru.drrey.babyname.partners.presentation
 
 import android.os.Bundle
 import android.util.SparseArray
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
 import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.drrey.babyname.common.presentation.base.BaseActivity
+import ru.drrey.babyname.common.presentation.base.FlowFragment
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
-import ru.drrey.babyname.navigation.AppNavigator
 import ru.drrey.babyname.partners.R
-import ru.terrakok.cicerone.Navigator
+import ru.drrey.babyname.partners.di.PartnersComponent
+import ru.drrey.babyname.partners.navigation.AddPartnerFragmentScreen
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever
 
-
-@ExperimentalCoroutinesApi
-class AddPartnerActivity : BaseActivity() {
-    override val navigator: Navigator
-        get() = AppNavigator(this, R.id.parentLayout)
+class AddPartnerFlowFragment : FlowFragment() {
+    override val featureDependencies = listOf(PartnersComponent::class)
 
     private val viewModel: PartnersViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.add_partner_activity)
-        viewModel.getViewEvent().observe(this, NonNullObserver {
+    override fun getFlowScreen() = AddPartnerFragmentScreen()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getViewEvent().observe(viewLifecycleOwner, NonNullObserver {
             when (it) {
                 is PartnersViewEvent.PartnerAddError -> {
-                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
                 PartnersViewEvent.PartnerAdded -> {
-                    finish()
+                    router.exit()
                 }
             }
         })
 
         val barcodeCapture =
-            supportFragmentManager.findFragmentById(R.id.barcode) as BarcodeCapture?
+            childFragmentManager.findFragmentById(R.id.fragmentHolder) as BarcodeCapture?
         barcodeCapture?.setRetrieval(object : BarcodeRetriever {
             override fun onRetrieved(barcode: Barcode?) {
                 barcode?.let {

@@ -1,6 +1,5 @@
 package ru.drrey.babyname.results
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
@@ -15,7 +14,6 @@ import ru.drrey.babyname.results.domain.interactor.GetResultsInteractor
 import ru.drrey.babyname.results.navigation.ResultsFlowScreenProviderImpl
 import ru.drrey.babyname.results.presentation.ResultsViewModel
 
-@ExperimentalCoroutinesApi
 object ResultsComponent : FeatureComponent<ResultsDependencies>(), ResultsApi {
     override fun getResultsFlowScreenProvider() = get<ResultsFlowScreenProvider>()
 
@@ -30,7 +28,7 @@ object ResultsComponent : FeatureComponent<ResultsDependencies>(), ResultsApi {
     }
 
     private val resultsNavigationModule = module {
-        single { ResultsFlowScreenProviderImpl() }
+        single<ResultsFlowScreenProvider> { ResultsFlowScreenProviderImpl() }
     }
 
     private val resultsRepositoryModule = module {

@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.auth.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
+import ru.drrey.babyname.common.presentation.router
 
 const val RC_SIGN_IN = 111
 
@@ -22,13 +23,13 @@ class AuthFragment : Fragment() {
         fun newInstance() = AuthFragment()
     }
 
-    private val authViewModel: AuthViewModel by sharedViewModel()
+    private val authViewModel: AuthViewModel by sharedViewModel(from = { parentFragment!! })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.auth_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_auth, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,6 +55,7 @@ class AuthFragment : Fragment() {
             Toast.makeText(context!!, viewState.error, Toast.LENGTH_LONG).show()
         } else if (!viewState.isLoading && viewState.isLoaded && viewState.error == null && viewState.userId != null) {
             Toast.makeText(context!!, viewState.userId, Toast.LENGTH_LONG).show()
+            router?.exit()
         }
     }
 

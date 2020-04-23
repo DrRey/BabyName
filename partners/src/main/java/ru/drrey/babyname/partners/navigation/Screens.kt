@@ -1,23 +1,26 @@
 package ru.drrey.babyname.partners.navigation
 
-import android.content.Context
-import android.content.Intent
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import ru.drrey.babyname.common.navigation.AppScreen
-import ru.drrey.babyname.partners.presentation.AddPartnerActivity
+import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
+import ru.drrey.babyname.partners.presentation.AddPartnerFlowFragment
+import ru.drrey.babyname.partners.presentation.PartnersQrCodeFlowFragment
 import ru.drrey.babyname.partners.presentation.PartnersQrCodeFragment
+import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-@ExperimentalCoroutinesApi
-class PartnersQrCodeScreen : AppScreen() {
-    override fun getFragment(): Fragment {
-        return PartnersQrCodeFragment.newInstance()
-    }
+class PartnersQrCodeScreen : SupportAppScreen() {
+    override fun getFragment() = PartnersQrCodeFlowFragment()
 }
 
-@ExperimentalCoroutinesApi
-class AddPartnerScreen : AppScreen() {
-    override fun getActivityIntent(context: Context): Intent? {
-        return Intent(context, AddPartnerActivity::class.java)
-    }
+class PartnersQrCodeFragmentScreen : SupportAppScreen() {
+    override fun getFragment() = PartnersQrCodeFragment.newInstance()
+}
+
+class AddPartnerScreen : SupportAppScreen() {
+    override fun getFragment() = AddPartnerFlowFragment()
+}
+
+class AddPartnerFragmentScreen : SupportAppScreen() {
+    override fun getFragment(): Fragment =
+        BarcodeCapture().shouldAutoFocus(true).setShowDrawRect(false).setShowFlash(false)
+            .setSupportMultipleScan(false)
 }

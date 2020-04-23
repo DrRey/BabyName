@@ -4,12 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.results.domain.entity.Result
 import ru.drrey.babyname.results.domain.interactor.GetResultsInteractor
 
-@ExperimentalCoroutinesApi
 class ResultsViewModel(
     private val getResultsInteractor: GetResultsInteractor
 ) : ViewModel(), StateViewModel<ResultsViewState, ResultsViewEvent> {

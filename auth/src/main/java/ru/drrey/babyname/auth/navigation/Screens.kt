@@ -1,12 +1,13 @@
 package ru.drrey.babyname.auth.navigation
 
-import android.content.Context
-import android.content.Intent
-import ru.drrey.babyname.auth.presentation.AuthActivity
-import ru.drrey.babyname.common.navigation.AppScreen
+import ru.drrey.babyname.auth.presentation.AuthFlowFragment
+import ru.drrey.babyname.auth.presentation.AuthFragment
+import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class AuthScreen : AppScreen() {
-    override fun getActivityIntent(context: Context): Intent {
-        return Intent(context, AuthActivity::class.java)
-    }
+class AuthScreen : SupportAppScreen() {
+    override fun getFragment() = AuthFlowFragment()
+}
+
+class AuthFragmentScreen : SupportAppScreen() {
+    override fun getFragment() = AuthFragment.newInstance()
 }

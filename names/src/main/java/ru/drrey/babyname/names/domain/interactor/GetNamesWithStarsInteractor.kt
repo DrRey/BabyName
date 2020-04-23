@@ -1,6 +1,5 @@
 package ru.drrey.babyname.names.domain.interactor
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.zip
@@ -11,7 +10,6 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
 /**
  * Get names with stars interactor
  */
-@ExperimentalCoroutinesApi
 class GetNamesWithStarsInteractor(
     private val namesRepository: NamesRepository,
     private val getUserId: () -> Flow<String>

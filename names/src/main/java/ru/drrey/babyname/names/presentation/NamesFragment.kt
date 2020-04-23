@@ -10,14 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.names_fragment.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_names.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.names.R
 
-@ExperimentalCoroutinesApi
 class NamesFragment : Fragment() {
 
     companion object {
@@ -26,13 +24,13 @@ class NamesFragment : Fragment() {
 
     private val namesAdapter = GroupAdapter<ViewHolder>()
     private val namesSection = Section()
-    private val viewModel: NamesViewModel by viewModel()
+    private val viewModel: NamesViewModel by sharedViewModel(from = { parentFragment!! })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.names_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_names, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

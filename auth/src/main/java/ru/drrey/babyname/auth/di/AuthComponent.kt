@@ -1,6 +1,5 @@
 package ru.drrey.babyname.auth.di
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
@@ -15,7 +14,6 @@ import ru.drrey.babyname.common.di.FeatureComponent
 import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
 import ru.drrey.babyname.navigationmediator.AuthFlowScreenProvider
 
-@ExperimentalCoroutinesApi
 object AuthComponent : FeatureComponent<AuthDependencies>(), AuthApi {
     override fun getFlowScreenProvider() = get<AuthFlowScreenProvider>()
     override fun getUserIdInteractor(): BaseInteractor<String, Void?> = get<GetUserIdInteractor>()
@@ -30,11 +28,11 @@ object AuthComponent : FeatureComponent<AuthDependencies>(), AuthApi {
     }
 
     private val authNavigationModule = module {
-        single { AuthFlowScreenProviderImpl() }
+        single<AuthFlowScreenProvider> { AuthFlowScreenProviderImpl() }
     }
 
     private val authRepositoryModule = module {
-        single { AuthRepositoryImpl(get()) }
+        single<AuthRepository> { AuthRepositoryImpl(get()) }
     }
 
     private val authInteractorModule = module {

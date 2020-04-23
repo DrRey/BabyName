@@ -9,27 +9,25 @@ import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.fragment.app.Fragment
 import com.google.zxing.WriterException
-import kotlinx.android.synthetic.main.partners_qr_code_fragment.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_partners_qr_code.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.partners.R
 
 
-@ExperimentalCoroutinesApi
 class PartnersQrCodeFragment : Fragment() {
 
     companion object {
         fun newInstance() = PartnersQrCodeFragment()
     }
 
-    private val viewModel: PartnersViewModel by viewModel()
+    private val viewModel: PartnersViewModel by sharedViewModel(from = { parentFragment!! })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.partners_qr_code_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_partners_qr_code, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

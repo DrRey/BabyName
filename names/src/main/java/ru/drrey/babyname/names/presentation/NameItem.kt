@@ -3,13 +3,13 @@ package ru.drrey.babyname.names.presentation
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.name_item.view.*
+import kotlinx.android.synthetic.main.item_name.view.*
 import ru.drrey.babyname.names.R
 import ru.drrey.babyname.names.domain.entity.Name
 
 class NameItem(val name: Name, private val onClickListener: (Name, Int, Int) -> Unit) :
     Item<ViewHolder>() {
-    override fun getLayout() = R.layout.name_item
+    override fun getLayout() = R.layout.item_name
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.apply {

@@ -1,7 +1,6 @@
 package ru.drrey.babyname.auth.data
 
 import android.content.SharedPreferences
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,6 @@ import ru.drrey.babyname.auth.domain.repository.AuthRepository
 
 const val PREFS_USER_ID = "prefs_user_id"
 
-@ExperimentalCoroutinesApi
 class AuthRepositoryImpl(private val sharedPreferences: SharedPreferences) : AuthRepository {
     override fun setUserId(userId: String): Flow<Nothing> = callbackFlow {
         sharedPreferences.edit().putString(PREFS_USER_ID, userId).apply()

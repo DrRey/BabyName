@@ -1,6 +1,5 @@
 package ru.drrey.babyname.results.domain.interactor
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -11,7 +10,6 @@ import ru.drrey.babyname.results.domain.entity.Result
 /**
  * Get results interactor
  */
-@ExperimentalCoroutinesApi
 class GetResultsInteractor(
     private val getUserId: () -> Flow<String>,
     private val getStars: (String) -> Flow<List<NameStars>>,

@@ -1,7 +1,6 @@
 package ru.drrey.babyname.partners.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -9,7 +8,6 @@ import ru.drrey.babyname.common.domain.entity.NameStars
 import ru.drrey.babyname.partners.domain.entity.Partner
 import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 
-@ExperimentalCoroutinesApi
 class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersRepository {
     override fun clearPartners(userId: String, partners: List<Partner>): Flow<Nothing> =
         partners.map { partner ->

@@ -1,7 +1,6 @@
 package ru.drrey.babyname.names.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +9,6 @@ import ru.drrey.babyname.common.domain.entity.NameStars
 import ru.drrey.babyname.names.domain.entity.Name
 import ru.drrey.babyname.names.domain.repository.NamesRepository
 
-@ExperimentalCoroutinesApi
 class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
     override fun getNames(): Flow<List<Name>> = callbackFlow {
         db.collection("names").get()
