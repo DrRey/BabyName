@@ -5,7 +5,7 @@ import org.koin.core.get
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.common.di.FeatureComponent
-import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
+import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.names.api.NamesApi
 import ru.drrey.babyname.names.data.repository.NamesRepositoryImpl
 import ru.drrey.babyname.names.domain.interactor.CountStarredNamesInteractor
@@ -18,7 +18,7 @@ import ru.drrey.babyname.names.presentation.NamesViewModel
 import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
 object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
-    override fun countStarredNamesInteractor(): BaseInteractor<Int, Void?> =
+    override fun countStarredNamesInteractor(): Interactor<Int, Void?> =
         get<CountStarredNamesInteractor>()
 
     override fun getStars(userId: String) = get<NamesRepository>().getStars(userId)

@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
+import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.partners.domain.interactor.AddPartnerInteractor
 
 class PartnersViewModel(
-    private val getUserIdInteractor: BaseInteractor<String, Void?>,
+    private val getUserIdInteractor: Interactor<String, Void?>,
     private val addPartnerInteractor: AddPartnerInteractor
 ) : ViewModel(), StateViewModel<PartnersViewState, PartnersViewEvent> {
 

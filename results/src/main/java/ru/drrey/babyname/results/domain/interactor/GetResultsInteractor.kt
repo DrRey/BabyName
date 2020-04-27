@@ -2,7 +2,7 @@ package ru.drrey.babyname.results.domain.interactor
 
 import kotlinx.coroutines.flow.*
 import ru.drrey.babyname.common.domain.entity.NameStars
-import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
+import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.results.domain.entity.Result
 
 /**
@@ -13,7 +13,7 @@ class GetResultsInteractor(
     private val getStars: (String) -> Flow<List<NameStars>>,
     private val getPartners: (String) -> Flow<List<String>>,
     private val getPartnersStars: (List<String>) -> Flow<Pair<String, List<NameStars>>>
-) : BaseInteractor<List<Result>, Void?>() {
+) : Interactor<List<Result>, Void?>() {
 
     override fun buildFlow(params: Void?): Flow<List<Result>> {
         return getUserId().flatMapLatest { userId ->

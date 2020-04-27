@@ -11,12 +11,12 @@ import ru.drrey.babyname.auth.domain.repository.AuthRepository
 import ru.drrey.babyname.auth.navigation.AuthFlowScreenProviderImpl
 import ru.drrey.babyname.auth.presentation.AuthViewModel
 import ru.drrey.babyname.common.di.FeatureComponent
-import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
+import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.navigationmediator.AuthFlowScreenProvider
 
 object AuthComponent : FeatureComponent<AuthDependencies>(), AuthApi {
     override fun getFlowScreenProvider() = get<AuthFlowScreenProvider>()
-    override fun getUserIdInteractor(): BaseInteractor<String, Void?> = get<GetUserIdInteractor>()
+    override fun getUserIdInteractor(): Interactor<String, Void?> = get<GetUserIdInteractor>()
     override fun getUserId() = get<AuthRepository>().getUserId()
 
     private val authDependenciesModule = module {

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  * Base interactor class. Thread executor and post execution thread are injected.
  * Provides observable execution and dispose methods.
  */
-abstract class BaseInteractor<T, in Params> {
+abstract class Interactor<T, in Params> {
     private var currentJob: Job? = null
 
     abstract fun buildFlow(params: Params): Flow<T>

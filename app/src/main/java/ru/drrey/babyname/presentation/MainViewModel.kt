@@ -4,14 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import ru.drrey.babyname.common.domain.interactor.base.BaseInteractor
+import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
 
 class MainViewModel(
-    private val getUserIdInteractor: BaseInteractor<String, Void?>,
-    private val getPartnerIdsListInteractor: BaseInteractor<List<String>, Void?>,
-    private val clearPartnersInteractor: BaseInteractor<Nothing, Void?>,
-    private val getStarredNamesInteractor: BaseInteractor<Int, Void?>
+    private val getUserIdInteractor: Interactor<String, Void?>,
+    private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
+    private val clearPartnersInteractor: Interactor<Nothing, Void?>,
+    private val getStarredNamesInteractor: Interactor<Int, Void?>
 ) : ViewModel(), StateViewModel<MainViewState, MainViewEvent> {
 
     override val viewState by lazy {
