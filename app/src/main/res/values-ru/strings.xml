@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logged_in">Вход выполнен</string>
+    <string name="login">Войти</string>
+    <string name="names_starred">Имён оценено: %1$d</string>
+    <string name="partners">Партнёров: %1$d</string>
+    <string name="add_partner">Добавить партнёра</string>
+    <string name="show_partner_qr">Показать QR-код для партнёра</string>
+</resources>

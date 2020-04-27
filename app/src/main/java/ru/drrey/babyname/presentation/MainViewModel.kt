@@ -46,6 +46,7 @@ class MainViewModel(
                         act(MainStateAction.LoadError(it.message ?: ""))
                     }) {
                     act(MainStateAction.LoadedStarredNames(it))
+                    act(MainStateAction.LoadingFinished)
                 }
             }
 
@@ -67,13 +68,16 @@ class MainViewModel(
                 viewState.copy(isLoading = false, error = action.message)
             }
             is MainStateAction.LoadedUserId -> {
-                viewState.copy(userId = action.userId)
+                viewState.copy(isLoggedIn = true)
             }
             is MainStateAction.LoadedPartners -> {
-                viewState.copy(partnerIds = action.partnerIds)
+                viewState.copy(partnersCount = action.partnerIds.size)
             }
             is MainStateAction.LoadedStarredNames -> {
                 viewState.copy(starredNamesCount = action.count)
+            }
+            MainStateAction.LoadingFinished -> {
+                viewState.copy(isLoading = false)
             }
             else -> {
                 viewState
@@ -91,6 +95,7 @@ class MainViewModel(
         class LoadedUserId(val userId: String) : MainStateAction()
         class LoadedPartners(val partnerIds: List<String>) : MainStateAction()
         class LoadedStarredNames(val count: Int) : MainStateAction()
+        object LoadingFinished : MainStateAction()
     }
 }
 
@@ -99,7 +104,7 @@ sealed class MainViewEvent : ViewEvent
 data class MainViewState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val userId: String? = null,
-    val partnerIds: List<String>? = null,
-    val starredNamesCount: Int? = null
+    val isLoggedIn: Boolean = false,
+    val partnersCount: Int = 0,
+    val starredNamesCount: Int = 0
 ) : ViewState
