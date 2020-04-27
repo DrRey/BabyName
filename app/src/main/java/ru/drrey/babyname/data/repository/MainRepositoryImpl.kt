@@ -9,6 +9,8 @@ const val PREFS_WELCOME_SCREEN = "prefs_welcome_screen"
 
 class MainRepositoryImpl(private val sharedPreferences: SharedPreferences) : MainRepository {
     override fun checkWelcomeScreenShown(): Flow<Boolean> = flow {
-        emit(sharedPreferences.getBoolean(PREFS_WELCOME_SCREEN, false))
+        emit(sharedPreferences.getBoolean(PREFS_WELCOME_SCREEN, false).also {
+            sharedPreferences.edit().putBoolean(PREFS_WELCOME_SCREEN, true).apply()
+        })
     }
 }

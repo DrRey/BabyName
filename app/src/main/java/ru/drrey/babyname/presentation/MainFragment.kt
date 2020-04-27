@@ -47,6 +47,7 @@ class MainFragment : Fragment() {
             setOnClickListener { activity?.router?.startFlow(PartnersQrCodeFlow) }
         }
         namesView?.setOnClickListener { activity?.router?.startFlow(NamesFlow) }
+        boySexView?.setOnClickListener { viewModel.loadData() }
 
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)

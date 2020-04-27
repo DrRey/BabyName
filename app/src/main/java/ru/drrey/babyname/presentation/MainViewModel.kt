@@ -29,32 +29,31 @@ class MainViewModel(
 
     fun loadData() {
         act(MainStateAction.LoadingStarted)
-        checkWelcomeScreenShownInteractor.execute(viewModelScope, null) {
-            act(MainStateAction.WelcomeScreenNeeded(!it))
-        }
-        getUserIdInteractor.execute(
-            viewModelScope,
-            null,
-            onError = { act(MainStateAction.LoadError(it.message ?: "")) }) { userId ->
-            act(MainStateAction.LoadedUserId(userId))
-            getPartnerIdsListInteractor.execute(
+        checkWelcomeScreenShownInteractor.execute(viewModelScope, null) { welcomeScreenShown ->
+            act(MainStateAction.WelcomeScreenNeeded(!welcomeScreenShown))
+            getUserIdInteractor.execute(
                 viewModelScope,
                 null,
-                onError = {
-                    act(MainStateAction.LoadError(it.message ?: ""))
-                }) { partnerIds ->
-                act(MainStateAction.LoadedPartners(partnerIds))
-                getStarredNamesInteractor.execute(
+                onError = { act(MainStateAction.LoadError(it.message ?: "")) }) { userId ->
+                act(MainStateAction.LoadedUserId(userId))
+                getPartnerIdsListInteractor.execute(
                     viewModelScope,
                     null,
                     onError = {
                         act(MainStateAction.LoadError(it.message ?: ""))
-                    }) {
-                    act(MainStateAction.LoadedStarredNames(it))
-                    act(MainStateAction.LoadingFinished)
+                    }) { partnerIds ->
+                    act(MainStateAction.LoadedPartners(partnerIds))
+                    getStarredNamesInteractor.execute(
+                        viewModelScope,
+                        null,
+                        onError = {
+                            act(MainStateAction.LoadError(it.message ?: ""))
+                        }) {
+                        act(MainStateAction.LoadedStarredNames(it))
+                        act(MainStateAction.LoadingFinished)
+                    }
                 }
             }
-
         }
     }
 

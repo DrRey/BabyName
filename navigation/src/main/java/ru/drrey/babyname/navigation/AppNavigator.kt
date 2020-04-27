@@ -67,6 +67,14 @@ open class AppNavigator(
         nextFragment: Fragment?,
         fragmentTransaction: FragmentTransaction
     ) {
+        //not doing animations if first fragment in container and not SecondaryNavigationFragment
+        //or TertiaryNavigationFragment or QuaternaryNavigationFragment
+        if (currentFragment == null && nextFragment !is SecondaryNavigationFragment &&
+            nextFragment !is TertiaryNavigationFragment && nextFragment !is QuaternaryNavigationFragment
+        ) {
+            return
+        }
+
         when (nextFragment) {
             is AlphaNavigationFragment -> fragmentTransaction.setCustomAnimations(
                 R.anim.alpha_in,
