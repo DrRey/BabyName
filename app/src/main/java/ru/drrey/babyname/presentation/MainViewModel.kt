@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
+import ru.drrey.babyname.domain.interactor.CheckWelcomeScreenShownInteractor
 
 class MainViewModel(
+    private val checkWelcomeScreenShownInteractor: CheckWelcomeScreenShownInteractor,
     private val getUserIdInteractor: Interactor<String, Void?>,
     private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
     private val clearPartnersInteractor: Interactor<Nothing, Void?>,
@@ -27,6 +29,9 @@ class MainViewModel(
 
     fun loadData() {
         act(MainStateAction.LoadingStarted)
+        checkWelcomeScreenShownInteractor.execute(viewModelScope, null) {
+            act(MainStateAction.WelcomeScreenNeeded(!it))
+        }
         getUserIdInteractor.execute(
             viewModelScope,
             null,
@@ -67,6 +72,9 @@ class MainViewModel(
             is MainStateAction.LoadError -> {
                 viewState.copy(isLoading = false, error = action.message)
             }
+            is MainStateAction.WelcomeScreenNeeded -> {
+                viewState.copy(welcomeScreenNeeded = action.needed)
+            }
             is MainStateAction.LoadedUserId -> {
                 viewState.copy(isLoggedIn = true)
             }
@@ -92,6 +100,7 @@ class MainViewModel(
     sealed class MainStateAction : Action {
         object LoadingStarted : MainStateAction()
         class LoadError(val message: String) : MainStateAction()
+        class WelcomeScreenNeeded(val needed: Boolean) : MainStateAction()
         class LoadedUserId(val userId: String) : MainStateAction()
         class LoadedPartners(val partnerIds: List<String>) : MainStateAction()
         class LoadedStarredNames(val count: Int) : MainStateAction()
@@ -104,6 +113,7 @@ sealed class MainViewEvent : ViewEvent
 data class MainViewState(
     val isLoading: Boolean = false,
     val error: String? = null,
+    val welcomeScreenNeeded: Boolean = false,
     val isLoggedIn: Boolean = false,
     val partnersCount: Int = 0,
     val starredNamesCount: Int = 0

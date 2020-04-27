@@ -55,7 +55,9 @@ class MainFragment : Fragment() {
 
     private fun renderState(viewState: MainViewState) {
         if (!viewState.isLoading) {
-            if (viewState.error != null) {
+            if (viewState.welcomeScreenNeeded) {
+
+            } else if (viewState.error != null) {
                 Toast.makeText(context, viewState.error, Toast.LENGTH_LONG).show()
             } else {
                 if (viewState.isLoggedIn) {
