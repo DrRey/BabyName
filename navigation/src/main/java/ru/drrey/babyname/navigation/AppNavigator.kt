@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 import ru.terrakok.cicerone.commands.BackTo
+import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Forward
 
 open class AppNavigator(
@@ -58,6 +59,28 @@ open class AppNavigator(
             .addToBackStack(screen.screenKey)
             .commit()
         localStackCopy.add(screen.screenKey)
+    }
+
+    override fun setupFragmentTransaction(
+        command: Command,
+        currentFragment: Fragment?,
+        nextFragment: Fragment?,
+        fragmentTransaction: FragmentTransaction
+    ) {
+        when (nextFragment) {
+            is AlphaNavigationFragment -> fragmentTransaction.setCustomAnimations(
+                R.anim.alpha_in,
+                R.anim.alpha_out,
+                R.anim.alpha_in,
+                R.anim.alpha_out
+            )
+            else -> fragmentTransaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+        }
     }
 
     private fun shouldAddFragment(currentFragment: Fragment?, fragment: Fragment?) =
