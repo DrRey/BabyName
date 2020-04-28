@@ -12,6 +12,7 @@ import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.fragment_partners_qr_code.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
+import ru.drrey.babyname.common.presentation.doOnMeasure
 import ru.drrey.babyname.partners.R
 
 
@@ -44,17 +45,23 @@ class PartnersQrCodeFragment : Fragment() {
         if (viewState.loadUserError != null) {
             Toast.makeText(context, viewState.loadUserError, Toast.LENGTH_SHORT).show()
         } else {
-            viewState.userId?.let { userId -> showQrCode(userId) }
+            viewState.userId?.let { userId ->
+                showQrCode(userId)
+            }
         }
     }
 
     private fun showQrCode(userId: String) {
-        val qrgEncoder = QRGEncoder(userId, null, QRGContents.Type.TEXT, qrCodeView.width)
-        try {
-            val bitmap = qrgEncoder.encodeAsBitmap()
-            qrCodeView.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
+        if (qrCodeView.width == 0) {
+            qrCodeView.doOnMeasure { showQrCode(userId) }
+        } else {
+            val qrgEncoder = QRGEncoder(userId, null, QRGContents.Type.TEXT, qrCodeView.width)
+            try {
+                val bitmap = qrgEncoder.encodeAsBitmap()
+                qrCodeView.setImageBitmap(bitmap)
+            } catch (e: WriterException) {
 
+            }
         }
     }
 }

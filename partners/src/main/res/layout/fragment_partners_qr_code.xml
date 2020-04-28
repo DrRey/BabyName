@@ -15,5 +15,4 @@
         android:layout_margin="18dp"
         android:scaleType="centerInside"
         tools:ignore="ContentDescription" />
-
 </FrameLayout>
