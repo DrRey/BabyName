@@ -67,11 +67,8 @@ open class AppNavigator(
         nextFragment: Fragment?,
         fragmentTransaction: FragmentTransaction
     ) {
-        //not doing animations if first fragment in container and not SecondaryNavigationFragment
-        //or TertiaryNavigationFragment or QuaternaryNavigationFragment
-        if (currentFragment == null && nextFragment !is SecondaryNavigationFragment &&
-            nextFragment !is TertiaryNavigationFragment && nextFragment !is QuaternaryNavigationFragment
-        ) {
+        //not doing animations if first fragment in container
+        if (currentFragment == null) {
             return
         }
 
@@ -97,8 +94,17 @@ open class AppNavigator(
                 (fragment is QuaternaryNavigationFragment && currentFragment !is QuaternaryNavigationFragment)
 
     override fun fragmentBack() {
-        super.fragmentBack()
-        onPopBackStack()
+        if (localStackCopy.size == 1 && fragmentManager.findFragmentById(containerId)?.parentFragment == null) {
+            //not removing last fragment in activity. Exiting activity instead
+            localStackCopy.removeLast()
+            activityBack()
+        } else if (localStackCopy.size > 0) {
+            fragmentManager.popBackStack()
+            localStackCopy.removeLast()
+            onPopBackStack()
+        } else {
+            activityBack()
+        }
     }
 
     override fun backTo(command: BackTo) {
