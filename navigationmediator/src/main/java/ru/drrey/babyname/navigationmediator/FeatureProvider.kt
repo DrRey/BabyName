@@ -4,6 +4,7 @@ import kotlin.reflect.KClass
 
 interface FeatureProvider {
     fun prepareFeature(featureApiClass: KClass<*>)
+    val welcomeFlowScreenProvider: WelcomeFlowScreenProvider
     val authFlowScreenProvider: AuthFlowScreenProvider
     val namesFlowScreenProvider: NamesFlowScreenProvider
     val partnersQrCodeFlowScreenProvider: PartnersQrCodeFlowScreenProvider

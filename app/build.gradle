@@ -25,6 +25,8 @@ dependencies {
     implementation project(path: ':navigation')
     implementation project(path: ':navigationmediator')
     implementation project(path: ':common')
+    implementation project(path: ':welcome')
+    implementation project(path: ':welcomeApi')
     implementation project(path: ':auth')
     implementation project(path: ':authApi')
     implementation project(path: ':names')

@@ -11,22 +11,11 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
-import ru.drrey.babyname.navigation.AddPartnerFlow
-import ru.drrey.babyname.navigation.AuthFlow
-import ru.drrey.babyname.navigation.NamesFlow
-import ru.drrey.babyname.navigation.PartnersQrCodeFlow
+import ru.drrey.babyname.navigation.*
 
 class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by sharedViewModel(from = { parentFragment!! })
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            viewModel.loadData()
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,15 +41,20 @@ class MainFragment : Fragment() {
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
+        viewModel.getViewEvent().observe(viewLifecycleOwner, NonNullObserver {
+            processEvent(it)
+        })
+
+        if (savedInstanceState == null) {
+            viewModel.loadData()
+        }
     }
 
     private fun renderState(viewState: MainViewState) {
-        if (!viewState.isLoading) {
+        if (!viewState.showOverlay) {
             overlayView?.visibility = View.GONE
-
-            if (viewState.welcomeScreenNeeded) {
-
-            } else if (viewState.error != null) {
+        }
+        if (viewState.error != null) {
                 Toast.makeText(context, viewState.error, Toast.LENGTH_LONG).show()
             } else {
                 if (viewState.isLoggedIn) {
@@ -77,6 +71,11 @@ class MainFragment : Fragment() {
                 partnersView?.text = getString(R.string.partners, viewState.partnersCount)
                 namesView?.text = getString(R.string.names_starred, viewState.starredNamesCount)
             }
+    }
+
+    private fun processEvent(viewEvent: MainViewEvent) {
+        if (viewEvent == MainViewEvent.WelcomeScreenNeeded) {
+            activity?.router?.startFlow(WelcomeFlow)
         }
     }
 }

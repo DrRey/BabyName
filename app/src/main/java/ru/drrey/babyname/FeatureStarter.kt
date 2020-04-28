@@ -13,9 +13,13 @@ import ru.drrey.babyname.partners.api.PartnersApi
 import ru.drrey.babyname.partners.di.PartnersComponent
 import ru.drrey.babyname.results.ResultsComponent
 import ru.drrey.babyname.results.api.ResultsApi
+import ru.drrey.babyname.welcome.api.WelcomeApi
+import ru.drrey.babyname.welcome.di.WelcomeComponent
 import kotlin.reflect.KClass
 
 object FeatureStarter : FeatureProvider, KoinComponent {
+    override val welcomeFlowScreenProvider: WelcomeFlowScreenProvider
+        get() = getWelcomeFeature().getFlowScreenProvider()
     override val authFlowScreenProvider: AuthFlowScreenProvider
         get() = getAuthFeature().getFlowScreenProvider()
     override val namesFlowScreenProvider: NamesFlowScreenProvider
@@ -45,6 +49,15 @@ object FeatureStarter : FeatureProvider, KoinComponent {
                 getNamesFeature()
             )
         })
+    }
+
+    fun getWelcomeFeature(): WelcomeApi {
+        WelcomeComponent.load()?.init(get {
+            parametersOf(
+                getAuthFeature()
+            )
+        })
+        return get()
     }
 
     fun getAuthFeature(): AuthApi {

@@ -12,6 +12,6 @@ class CheckWelcomeScreenShownInteractor(
 ) : Interactor<Boolean, Void?>() {
 
     override fun buildFlow(params: Void?): Flow<Boolean> {
-        return mainRepository.checkWelcomeScreenShown()
+        return mainRepository.checkFirstStart()
     }
 }

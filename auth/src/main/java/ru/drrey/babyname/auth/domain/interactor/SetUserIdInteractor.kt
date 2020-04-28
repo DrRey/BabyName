@@ -11,7 +11,7 @@ class SetUserIdInteractor(
     private val authRepository: AuthRepository
 ) : Interactor<Void, String>() {
 
-    override fun buildFlow(params: String): Flow<Void> {
+    override fun buildFlow(params: String): Flow<Nothing> {
         return authRepository.setUserId(params)
     }
 }

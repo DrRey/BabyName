@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
+import ru.drrey.babyname.auth.domain.entity.NotLoggedInException
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.domain.interactor.CheckWelcomeScreenShownInteractor
@@ -30,30 +31,39 @@ class MainViewModel(
     fun loadData() {
         act(MainStateAction.LoadingStarted)
         checkWelcomeScreenShownInteractor.execute(viewModelScope, null) { welcomeScreenShown ->
-            act(MainStateAction.WelcomeScreenNeeded(!welcomeScreenShown))
+            if (!welcomeScreenShown) {
+                act(MainStateAction.WelcomeScreenNeeded)
+            }
             getUserIdInteractor.execute(
                 viewModelScope,
                 null,
-                onError = { act(MainStateAction.LoadError(it.message ?: "")) }) { userId ->
-                act(MainStateAction.LoadedUserId(userId))
-                getPartnerIdsListInteractor.execute(
-                    viewModelScope,
-                    null,
-                    onError = {
+                onError = {
+                    if (it is NotLoggedInException) {
+                        act(MainStateAction.LoadingFinished)
+                    } else {
                         act(MainStateAction.LoadError(it.message ?: ""))
-                    }) { partnerIds ->
-                    act(MainStateAction.LoadedPartners(partnerIds))
-                    getStarredNamesInteractor.execute(
+                    }
+                }, collector = {
+                    act(MainStateAction.LoadedUserId(it))
+                }, onSuccess = {
+                    getPartnerIdsListInteractor.execute(
                         viewModelScope,
                         null,
                         onError = {
                             act(MainStateAction.LoadError(it.message ?: ""))
-                        }) {
-                        act(MainStateAction.LoadedStarredNames(it))
-                        act(MainStateAction.LoadingFinished)
+                        }) { partnerIds ->
+                        act(MainStateAction.LoadedPartners(partnerIds))
+                        getStarredNamesInteractor.execute(
+                            viewModelScope,
+                            null,
+                            onError = {
+                                act(MainStateAction.LoadError(it.message ?: ""))
+                            }) {
+                            act(MainStateAction.LoadedStarredNames(it))
+                            act(MainStateAction.LoadingFinished)
+                        }
                     }
-                }
-            }
+                })
         }
     }
 
@@ -66,13 +76,10 @@ class MainViewModel(
     private fun reduceMainViewState(viewState: MainViewState, action: Action): MainViewState {
         return when (action) {
             MainStateAction.LoadingStarted -> {
-                viewState.copy(isLoading = true, error = null)
+                viewState.copy(error = null)
             }
             is MainStateAction.LoadError -> {
-                viewState.copy(isLoading = false, error = action.message)
-            }
-            is MainStateAction.WelcomeScreenNeeded -> {
-                viewState.copy(welcomeScreenNeeded = action.needed)
+                viewState.copy(error = action.message)
             }
             is MainStateAction.LoadedUserId -> {
                 viewState.copy(isLoggedIn = true)
@@ -84,7 +91,7 @@ class MainViewModel(
                 viewState.copy(starredNamesCount = action.count)
             }
             MainStateAction.LoadingFinished -> {
-                viewState.copy(isLoading = false)
+                viewState.copy(showOverlay = false)
             }
             else -> {
                 viewState
@@ -93,13 +100,20 @@ class MainViewModel(
     }
 
     private fun actOnMainEvent(action: Action): MainViewEvent? {
-        return null
+        return when (action) {
+            MainStateAction.WelcomeScreenNeeded -> {
+                MainViewEvent.WelcomeScreenNeeded
+            }
+            else -> {
+                null
+            }
+        }
     }
 
     sealed class MainStateAction : Action {
         object LoadingStarted : MainStateAction()
         class LoadError(val message: String) : MainStateAction()
-        class WelcomeScreenNeeded(val needed: Boolean) : MainStateAction()
+        object WelcomeScreenNeeded : MainStateAction()
         class LoadedUserId(val userId: String) : MainStateAction()
         class LoadedPartners(val partnerIds: List<String>) : MainStateAction()
         class LoadedStarredNames(val count: Int) : MainStateAction()
@@ -107,12 +121,13 @@ class MainViewModel(
     }
 }
 
-sealed class MainViewEvent : ViewEvent
+sealed class MainViewEvent : ViewEvent {
+    object WelcomeScreenNeeded : MainViewEvent()
+}
 
 data class MainViewState(
-    val isLoading: Boolean = false,
+    val showOverlay: Boolean = true,
     val error: String? = null,
-    val welcomeScreenNeeded: Boolean = false,
     val isLoggedIn: Boolean = false,
     val partnersCount: Int = 0,
     val starredNamesCount: Int = 0

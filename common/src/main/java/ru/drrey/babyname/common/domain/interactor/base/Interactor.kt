@@ -30,19 +30,22 @@ abstract class Interactor<T, in Params> {
         scope: CoroutineScope,
         params: Params,
         onError: ((Exception) -> Unit)? = null,
-        onCompletion: (() -> Unit)? = null,
-        collector: (T) -> Unit
+        onSuccess: (() -> Unit)? = null,
+        finally: (() -> Unit)? = null,
+        collector: ((T) -> Unit)? = null
     ) {
         currentJob?.cancel()
         val flow = buildFlow(params).flowOn(Dispatchers.Default).conflate()
         currentJob = scope.launch {
             try {
-                flow.collect { collector.invoke(it) }
+                flow.collect { collector?.invoke(it) }
+                onSuccess?.invoke()
             } catch (e: Exception) {
                 Log.e("Interactor onError", e.toString())
                 onError?.invoke(e)
+            } finally {
+                finally?.invoke()
             }
-            onCompletion?.invoke()
         }
     }
 

@@ -14,7 +14,7 @@ class SetStarsInteractor(
     private val getUserId: () -> Flow<String>
 ) : Interactor<Void, SetStarsInteractor.Params>() {
 
-    override fun buildFlow(params: Params): Flow<Void> {
+    override fun buildFlow(params: Params): Flow<Nothing> {
         return getUserId().flatMapLatest { userId ->
             namesRepository.setStars(userId, params.name, params.stars)
         }

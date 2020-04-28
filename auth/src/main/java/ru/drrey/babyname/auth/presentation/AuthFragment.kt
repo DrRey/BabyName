@@ -54,7 +54,6 @@ class AuthFragment : Fragment() {
         } else if (!viewState.isLoading && viewState.isLoaded && viewState.error != null) {
             Toast.makeText(context!!, viewState.error, Toast.LENGTH_LONG).show()
         } else if (!viewState.isLoading && viewState.isLoaded && viewState.error == null && viewState.userId != null) {
-            Toast.makeText(context!!, viewState.userId, Toast.LENGTH_LONG).show()
             router?.exit()
         }
     }

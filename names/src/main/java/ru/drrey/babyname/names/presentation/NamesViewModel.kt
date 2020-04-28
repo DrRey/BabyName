@@ -42,7 +42,7 @@ class NamesViewModel(
             onError = {
                 act(NamesStateAction.StarsSetError(it.message ?: ""))
             },
-            onCompletion = { act(NamesStateAction.StarsSet(name, position, stars)) },
+            onSuccess = { act(NamesStateAction.StarsSet(name, position, stars)) },
             collector = {})
     }
 

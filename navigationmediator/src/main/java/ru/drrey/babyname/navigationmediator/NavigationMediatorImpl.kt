@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 class NavigationMediatorImpl(private val featureProvider: FeatureProvider) : NavigationMediator {
     override fun getScreen(flow: Flow): Screen {
         return when (flow) {
+            WelcomeFlow -> featureProvider.welcomeFlowScreenProvider.getScreen()
             AuthFlow -> featureProvider.authFlowScreenProvider.getScreen()
             NamesFlow -> featureProvider.namesFlowScreenProvider.getScreen()
             PartnersQrCodeFlow -> featureProvider.partnersQrCodeFlowScreenProvider.getScreen()

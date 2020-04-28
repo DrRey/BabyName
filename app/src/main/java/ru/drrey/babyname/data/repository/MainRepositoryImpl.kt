@@ -5,12 +5,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.drrey.babyname.domain.repository.MainRepository
 
-const val PREFS_WELCOME_SCREEN = "prefs_welcome_screen"
+const val PREFS_FIRST_START = "prefs_first_start"
 
 class MainRepositoryImpl(private val sharedPreferences: SharedPreferences) : MainRepository {
-    override fun checkWelcomeScreenShown(): Flow<Boolean> = flow {
-        emit(sharedPreferences.getBoolean(PREFS_WELCOME_SCREEN, false).also {
-            sharedPreferences.edit().putBoolean(PREFS_WELCOME_SCREEN, true).apply()
+    override fun checkFirstStart(): Flow<Boolean> = flow {
+        emit(sharedPreferences.getBoolean(PREFS_FIRST_START, false).also {
+            sharedPreferences.edit().putBoolean(PREFS_FIRST_START, true).apply()
         })
     }
 }
