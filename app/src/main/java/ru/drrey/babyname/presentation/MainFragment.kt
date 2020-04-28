@@ -56,6 +56,8 @@ class MainFragment : Fragment() {
 
     private fun renderState(viewState: MainViewState) {
         if (!viewState.isLoading) {
+            overlayView?.visibility = View.GONE
+
             if (viewState.welcomeScreenNeeded) {
 
             } else if (viewState.error != null) {
