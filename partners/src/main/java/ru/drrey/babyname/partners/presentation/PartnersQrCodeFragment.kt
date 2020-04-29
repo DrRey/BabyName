@@ -10,9 +10,9 @@ import androidmads.library.qrgenearator.QRGEncoder
 import androidx.fragment.app.Fragment
 import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.fragment_partners_qr_code.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.doOnMeasure
+import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.partners.R
 
 
@@ -22,7 +22,7 @@ class PartnersQrCodeFragment : Fragment() {
         fun newInstance() = PartnersQrCodeFragment()
     }
 
-    private val viewModel: PartnersViewModel by sharedViewModel(from = { parentFragment!! })
+    private val viewModel: PartnersViewModel by sharedParentViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

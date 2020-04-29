@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
+import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.navigation.*
 
 class MainFragment : Fragment() {
 
-    private val viewModel: MainViewModel by sharedViewModel(from = { parentFragment!! })
+    private val viewModel: MainViewModel by sharedParentViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

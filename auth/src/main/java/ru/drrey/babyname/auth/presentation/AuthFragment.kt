@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.auth.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
+import ru.drrey.babyname.common.presentation.sharedParentViewModel
 
 const val RC_SIGN_IN = 111
 
@@ -23,7 +23,7 @@ class AuthFragment : Fragment() {
         fun newInstance() = AuthFragment()
     }
 
-    private val authViewModel: AuthViewModel by sharedViewModel(from = { parentFragment!! })
+    private val authViewModel: AuthViewModel by sharedParentViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

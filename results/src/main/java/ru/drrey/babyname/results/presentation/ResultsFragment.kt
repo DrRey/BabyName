@@ -10,9 +10,9 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_results.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
+import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.results.R
 
 class ResultsFragment : Fragment() {
@@ -23,7 +23,7 @@ class ResultsFragment : Fragment() {
 
     private val resultsAdapter = GroupAdapter<ViewHolder>()
     private val resultsSection = Section()
-    private val viewModel: ResultsViewModel by sharedViewModel(from = { parentFragment!! })
+    private val viewModel: ResultsViewModel by sharedParentViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

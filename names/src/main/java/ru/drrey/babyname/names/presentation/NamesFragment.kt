@@ -11,9 +11,9 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_names.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
+import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.R
 
 class NamesFragment : Fragment() {
@@ -24,7 +24,7 @@ class NamesFragment : Fragment() {
 
     private val namesAdapter = GroupAdapter<ViewHolder>()
     private val namesSection = Section()
-    private val viewModel: NamesViewModel by sharedViewModel(from = { parentFragment!! })
+    private val viewModel: NamesViewModel by sharedParentViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
