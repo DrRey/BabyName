@@ -9,11 +9,14 @@ import kotlinx.coroutines.launch
 import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
+import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.welcome.R
 
 class WelcomeViewModel(
     private val getUserIdInteractor: Interactor<String, Void?>,
-    private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>
+    private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
+    private val getSexFilterInteractor: Interactor<Sex?, Void?>,
+    private val setSexFilterInteractor: Interactor<Nothing, Sex?>
 ) : ViewModel(), StateViewModel<WelcomeViewState, WelcomeViewEvent> {
 
     override val viewState by lazy {
@@ -33,13 +36,19 @@ class WelcomeViewModel(
                 startAuthWelcome()
             }
         }, onSuccess = {
-            getPartnerIdsListInteractor.execute(viewModelScope, null, collector = {
+            getPartnerIdsListInteractor.execute(viewModelScope, null) {
                 if (it.isNullOrEmpty()) {
                     startPartnerWelcome()
                 } else {
-                    startSexWelcome()
+                    getSexFilterInteractor.execute(viewModelScope, null) { sexFilter ->
+                        if (sexFilter == null) {
+                            startSexWelcome()
+                        } else {
+                            finishWelcome()
+                        }
+                    }
                 }
-            })
+            }
         })
     }
 
@@ -78,16 +87,10 @@ class WelcomeViewModel(
         }
     }
 
-    fun onSexGirl() {
-        finishWelcome()
-    }
-
-    fun onSexBoy() {
-        finishWelcome()
-    }
-
-    fun onSexNone() {
-        finishWelcome()
+    fun onSexSet(sex: Sex?) {
+        setSexFilterInteractor.execute(viewModelScope, sex, onSuccess = {
+            finishWelcome()
+        })
     }
 
     private fun finishWelcome() {

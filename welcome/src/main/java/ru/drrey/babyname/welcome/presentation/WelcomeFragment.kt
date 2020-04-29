@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.fragment_welcome.*
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
+import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.AddPartnerFlow
 import ru.drrey.babyname.navigation.AuthFlow
 import ru.drrey.babyname.navigation.PartnersQrCodeFlow
@@ -43,15 +44,15 @@ class WelcomeFragment : Fragment() {
 
         girlSexView?.apply {
             text = getString(R.string.girl)
-            setOnClickListener { viewModel.onSexGirl() }
+            setOnClickListener { viewModel.onSexSet(Sex.GIRL) }
         }
         boySexView?.apply {
             text = getString(R.string.boy)
-            setOnClickListener { viewModel.onSexBoy() }
+            setOnClickListener { viewModel.onSexSet(Sex.BOY) }
         }
         noSexView?.apply {
             text = getString(R.string.dont_know_yet)
-            setOnClickListener { viewModel.onSexNone() }
+            setOnClickListener { viewModel.onSexSet(null) }
         }
 
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {

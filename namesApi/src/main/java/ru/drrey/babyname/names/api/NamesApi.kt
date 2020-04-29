@@ -9,4 +9,6 @@ interface NamesApi {
     fun getFlowScreenProvider(): NamesFlowScreenProvider
     fun countStarredNamesInteractor(): Interactor<Int, Void?>
     fun getStars(userId: String): Flow<List<NameStars>>
+    fun getSexFilterInteractor(): Interactor<Sex?, Void?>
+    fun setSexFilterInteractor(): Interactor<Nothing, Sex?>
 }

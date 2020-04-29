@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import ru.drrey.babyname.common.domain.entity.NameStars
+import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.names.domain.entity.Name
 import ru.drrey.babyname.names.domain.repository.NamesRepository
 
@@ -54,10 +55,14 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         awaitClose { cancel() }
     }
 
-    override fun getSexFilter(userId: String): Flow<String> = callbackFlow {
+    override fun getSexFilter(userId: String): Flow<Sex?> = callbackFlow {
         db.collection("filters_$userId").document("sex").get()
             .addOnSuccessListener { doc ->
-                offer((doc.get("sex") ?: "ALL").toString())
+                offer(
+                    doc.get("sex")
+                        ?.takeIf { it.toString().isNotEmpty() }
+                        ?.let { Sex.valueOf(it.toString()) }
+                )
                 close()
             }.addOnFailureListener {
                 close(it)
@@ -65,13 +70,14 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         awaitClose { cancel() }
     }
 
-    override fun setSexFilter(userId: String, sex: String): Flow<Nothing> = callbackFlow {
+    override fun setSexFilter(userId: String, sex: Sex?): Flow<Nothing> = callbackFlow {
         db.collection("filters_$userId").document("sex").set(
-            sex
+            mapOf(Pair("sex", sex?.toString() ?: ""))
         ).addOnCompleteListener {
             close()
         }.addOnFailureListener {
             close(it)
         }
+        awaitClose { cancel() }
     }
 }

@@ -5,6 +5,7 @@ import org.koin.core.get
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.common.di.FeatureComponent
+import ru.drrey.babyname.names.api.NamesApi
 import ru.drrey.babyname.navigationmediator.WelcomeFlowScreenProvider
 import ru.drrey.babyname.partners.api.PartnersApi
 import ru.drrey.babyname.welcome.api.WelcomeApi
@@ -15,8 +16,8 @@ object WelcomeComponent : FeatureComponent<WelcomeDependencies>(), WelcomeApi {
     override fun getFlowScreenProvider() = get<WelcomeFlowScreenProvider>()
 
     private val welcomeDependenciesModule = module {
-        single { (authApi: AuthApi, partnersApi: PartnersApi) ->
-            WelcomeDependencies(authApi, partnersApi)
+        single { (authApi: AuthApi, partnersApi: PartnersApi, namesApi: NamesApi) ->
+            WelcomeDependencies(authApi, partnersApi, namesApi)
         }
     }
 
@@ -41,7 +42,9 @@ object WelcomeComponent : FeatureComponent<WelcomeDependencies>(), WelcomeApi {
             with(get<WelcomeDependencies>()) {
                 WelcomeViewModel(
                     authApi.getUserIdInteractor(),
-                    partnersApi.getPartnerIdsListInteractor()
+                    partnersApi.getPartnerIdsListInteractor(),
+                    namesApi.getSexFilterInteractor(),
+                    namesApi.setSexFilterInteractor()
                 )
             }
         }

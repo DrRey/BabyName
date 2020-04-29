@@ -7,11 +7,9 @@ import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.common.di.FeatureComponent
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.names.api.NamesApi
+import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.names.data.repository.NamesRepositoryImpl
-import ru.drrey.babyname.names.domain.interactor.CountStarredNamesInteractor
-import ru.drrey.babyname.names.domain.interactor.GetNamesInteractor
-import ru.drrey.babyname.names.domain.interactor.GetNamesWithStarsInteractor
-import ru.drrey.babyname.names.domain.interactor.SetStarsInteractor
+import ru.drrey.babyname.names.domain.interactor.*
 import ru.drrey.babyname.names.domain.repository.NamesRepository
 import ru.drrey.babyname.names.navigation.NamesFlowScreenProviderImpl
 import ru.drrey.babyname.names.presentation.NamesViewModel
@@ -24,6 +22,11 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     override fun getStars(userId: String) = get<NamesRepository>().getStars(userId)
 
     override fun getFlowScreenProvider() = get<NamesFlowScreenProvider>()
+
+    override fun getSexFilterInteractor(): Interactor<Sex?, Void?> = get<GetSexFilterInteractor>()
+
+    override fun setSexFilterInteractor(): Interactor<Nothing, Sex?> = get<SetSexFilterInteractor>()
+
     private val namesDependenciesModule = module {
         single { (authApi: AuthApi) ->
             NamesDependencies(authApi)
@@ -58,6 +61,18 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
         }
         factory {
             SetStarsInteractor(
+                get(),
+                get<NamesDependencies>().authApi::getUserId
+            )
+        }
+        factory {
+            GetSexFilterInteractor(
+                get(),
+                get<NamesDependencies>().authApi::getUserId
+            )
+        }
+        factory {
+            SetSexFilterInteractor(
                 get(),
                 get<NamesDependencies>().authApi::getUserId
             )
