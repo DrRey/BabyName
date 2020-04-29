@@ -10,4 +10,5 @@ dependencies {
     implementation project(path: ':navigationmediator')
     implementation project(path: ':welcomeApi')
     implementation project(path: ':authApi')
+    implementation project(path: ':partnersApi')
 }

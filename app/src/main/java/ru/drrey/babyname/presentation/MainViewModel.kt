@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import ru.drrey.babyname.auth.domain.entity.NotLoggedInException
+import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.domain.interactor.CheckWelcomeScreenShownInteractor
@@ -33,37 +33,38 @@ class MainViewModel(
         checkWelcomeScreenShownInteractor.execute(viewModelScope, null) { welcomeScreenShown ->
             if (!welcomeScreenShown) {
                 act(MainStateAction.WelcomeScreenNeeded)
-            }
-            getUserIdInteractor.execute(
-                viewModelScope,
-                null,
-                onError = {
-                    if (it is NotLoggedInException) {
-                        act(MainStateAction.LoadingFinished)
-                    } else {
-                        act(MainStateAction.LoadError(it.message ?: ""))
-                    }
-                }, collector = {
-                    act(MainStateAction.LoadedUserId(it))
-                }, onSuccess = {
-                    getPartnerIdsListInteractor.execute(
-                        viewModelScope,
-                        null,
-                        onError = {
+            } else {
+                getUserIdInteractor.execute(
+                    viewModelScope,
+                    null,
+                    onError = {
+                        if (it is NotLoggedInException) {
+                            act(MainStateAction.LoadingFinished)
+                        } else {
                             act(MainStateAction.LoadError(it.message ?: ""))
-                        }) { partnerIds ->
-                        act(MainStateAction.LoadedPartners(partnerIds))
-                        getStarredNamesInteractor.execute(
+                        }
+                    }, collector = {
+                        act(MainStateAction.LoadedUserId(it))
+                    }, onSuccess = {
+                        getPartnerIdsListInteractor.execute(
                             viewModelScope,
                             null,
                             onError = {
                                 act(MainStateAction.LoadError(it.message ?: ""))
-                            }) {
-                            act(MainStateAction.LoadedStarredNames(it))
-                            act(MainStateAction.LoadingFinished)
+                            }) { partnerIds ->
+                            act(MainStateAction.LoadedPartners(partnerIds))
+                            getStarredNamesInteractor.execute(
+                                viewModelScope,
+                                null,
+                                onError = {
+                                    act(MainStateAction.LoadError(it.message ?: ""))
+                                }) {
+                                act(MainStateAction.LoadedStarredNames(it))
+                                act(MainStateAction.LoadingFinished)
+                            }
                         }
-                    }
-                })
+                    })
+            }
         }
     }
 

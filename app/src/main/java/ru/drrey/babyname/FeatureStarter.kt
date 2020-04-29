@@ -54,7 +54,8 @@ object FeatureStarter : FeatureProvider, KoinComponent {
     fun getWelcomeFeature(): WelcomeApi {
         WelcomeComponent.load()?.init(get {
             parametersOf(
-                getAuthFeature()
+                getAuthFeature(),
+                getPartnersFeature()
             )
         })
         return get()

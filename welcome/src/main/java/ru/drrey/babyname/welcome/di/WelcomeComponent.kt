@@ -1,19 +1,22 @@
 package ru.drrey.babyname.welcome.di
 
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.get
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.common.di.FeatureComponent
 import ru.drrey.babyname.navigationmediator.WelcomeFlowScreenProvider
+import ru.drrey.babyname.partners.api.PartnersApi
 import ru.drrey.babyname.welcome.api.WelcomeApi
 import ru.drrey.babyname.welcome.navigation.WelcomeFlowScreenProviderImpl
+import ru.drrey.babyname.welcome.presentation.WelcomeViewModel
 
 object WelcomeComponent : FeatureComponent<WelcomeDependencies>(), WelcomeApi {
     override fun getFlowScreenProvider() = get<WelcomeFlowScreenProvider>()
 
     private val welcomeDependenciesModule = module {
-        single { (authApi: AuthApi) ->
-            WelcomeDependencies(authApi)
+        single { (authApi: AuthApi, partnersApi: PartnersApi) ->
+            WelcomeDependencies(authApi, partnersApi)
         }
     }
 
@@ -34,7 +37,14 @@ object WelcomeComponent : FeatureComponent<WelcomeDependencies>(), WelcomeApi {
     }
 
     private val welcomeViewModelModule = module {
-
+        viewModel {
+            with(get<WelcomeDependencies>()) {
+                WelcomeViewModel(
+                    authApi.getUserIdInteractor(),
+                    partnersApi.getPartnerIdsListInteractor()
+                )
+            }
+        }
     }
 
     override val modules = listOf(

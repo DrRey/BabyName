@@ -3,15 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/white">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/hello"
-        android:textSize="16sp"
+        android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/addPartnerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/partnerQrCodeView" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/partnerQrCodeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/partnerLaterView" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/partnerLaterView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/girlSexView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/boySexView" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/boySexView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/noSexView" />
+
+    <ru.drrey.babyname.common.presentation.ButtonView
+        android:id="@+id/noSexView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/partnerButtonsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="addPartnerView,partnerQrCodeView,partnerLaterView" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/sexButtonsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="girlSexView,boySexView,noSexView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

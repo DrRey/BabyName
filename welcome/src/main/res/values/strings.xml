@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello</string>
+    <string name="welcome_auth">First, how about we get to know each other?</string>
+    <string name="welcome_partner">Want to add a partner?</string>
+    <string name="welcome_sex">Who will it be?</string>
+    <string name="add_partner">Of course!</string>
+    <string name="partner_qr_code">Let them add me</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="girl">It\'s a girl!</string>
+    <string name="boy">It\'s a boy!</string>
+    <string name="dont_know_yet">I don\'t know yet</string>
+    <string name="congrats">Congratulations!</string>
+    <string name="welcome_ready">We are ready to begin</string>
 </resources>

@@ -6,7 +6,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
-import ru.drrey.babyname.auth.domain.entity.NotLoggedInException
+import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.auth.domain.repository.AuthRepository
 
 const val PREFS_USER_ID = "prefs_user_id"

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import ru.drrey.babyname.auth.domain.entity.NotLoggedInException
+import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.auth.domain.interactor.GetUserIdInteractor
 import ru.drrey.babyname.auth.domain.interactor.SetUserIdInteractor
 import ru.drrey.babyname.common.presentation.base.*
