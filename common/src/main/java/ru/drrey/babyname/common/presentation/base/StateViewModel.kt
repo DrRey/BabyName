@@ -1,5 +1,6 @@
 package ru.drrey.babyname.common.presentation.base
 
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hadilq.liveevent.LiveEvent
@@ -21,12 +22,22 @@ interface StateViewModel<T : ViewState, Z : ViewEvent> {
 
     fun act(action: Action) {
         eventActors.forEach { actor ->
-            actor(action)?.let { viewEvent.value = it }
+            actor(action)?.let {
+                if (Looper.myLooper() == Looper.getMainLooper()) {
+                    viewEvent.value = it
+                } else {
+                    viewEvent.postValue(it)
+                }
+            }
         }
 
         val newState = reduce(viewState.value ?: initialViewState, action)
         if (newState != viewState.value) {
-            viewState.value = newState
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                viewState.value = newState
+            } else {
+                viewState.postValue(newState)
+            }
         }
     }
 
