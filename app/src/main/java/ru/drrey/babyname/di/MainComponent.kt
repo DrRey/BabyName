@@ -35,6 +35,8 @@ object MainComponent : FeatureComponent<MainDependencies>() {
                     authApi.getUserIdInteractor(),
                     partnersApi.getPartnerIdsListInteractor(),
                     partnersApi.clearPartnersInteractor(),
+                    namesApi.getSexFilterInteractor(),
+                    namesApi.setSexFilterInteractor(),
                     namesApi.countStarredNamesInteractor()
                 )
             }

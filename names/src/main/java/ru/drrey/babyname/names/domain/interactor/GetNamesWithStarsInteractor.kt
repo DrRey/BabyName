@@ -2,6 +2,7 @@ package ru.drrey.babyname.names.domain.interactor
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.names.domain.entity.Name
@@ -17,15 +18,18 @@ class GetNamesWithStarsInteractor(
 
     override fun buildFlow(params: Void?): Flow<List<Name>> {
         return getUserId().flatMapLatest { userId ->
-            namesRepository.getNames()
-                .zip(namesRepository.getStars(userId)) { namesList, starsList ->
-                    namesList.asSequence().map { name ->
-                        name.apply {
-                            stars =
-                                starsList.firstOrNull { star -> star.name == name.displayName }?.stars
-                        }
-                    }.sortedWith(compareBy({ it.sex }, { it.displayName })).toList()
-                }
+            namesRepository.getSexFilter(userId).flatMapLatest { sexFilter ->
+                namesRepository.getNames()
+                    .map { if (sexFilter == null) it else it.filter { name -> name.sex == sexFilter } }
+                    .zip(namesRepository.getStars(userId)) { namesList, starsList ->
+                        namesList.asSequence().map { name ->
+                            name.apply {
+                                stars =
+                                    starsList.firstOrNull { star -> star.name == name.displayName }?.stars
+                            }
+                        }.sortedWith(compareBy({ it.sex }, { it.displayName })).toList()
+                    }
+            }
         }
     }
 }

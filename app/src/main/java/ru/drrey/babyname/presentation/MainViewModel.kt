@@ -8,12 +8,15 @@ import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.domain.interactor.CheckWelcomeScreenShownInteractor
+import ru.drrey.babyname.names.api.Sex
 
 class MainViewModel(
     private val checkWelcomeScreenShownInteractor: CheckWelcomeScreenShownInteractor,
     private val getUserIdInteractor: Interactor<String, Void?>,
     private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
     private val clearPartnersInteractor: Interactor<Nothing, Void?>,
+    private val getSexFilterInteractor: Interactor<Sex?, Void?>,
+    private val setSexFilterInteractor: Interactor<Nothing, Sex?>,
     private val getStarredNamesInteractor: Interactor<Int, Void?>
 ) : ViewModel(), StateViewModel<MainViewState, MainViewEvent> {
 
@@ -46,6 +49,9 @@ class MainViewModel(
                     }, collector = {
                         act(MainStateAction.LoadedUserId(it))
                     }, onSuccess = {
+                        getSexFilterInteractor.execute(viewModelScope, null) {
+                            act(MainStateAction.LoadedSexFilter(it))
+                        }
                         getPartnerIdsListInteractor.execute(
                             viewModelScope,
                             null,
@@ -74,6 +80,12 @@ class MainViewModel(
         }
     }
 
+    fun onSexSet(sex: Sex?) {
+        setSexFilterInteractor.execute(viewModelScope, sex, onSuccess = {
+            act(MainStateAction.LoadedSexFilter(sex))
+        })
+    }
+
     private fun reduceMainViewState(viewState: MainViewState, action: Action): MainViewState {
         return when (action) {
             MainStateAction.LoadingStarted -> {
@@ -87,6 +99,9 @@ class MainViewModel(
             }
             is MainStateAction.LoadedPartners -> {
                 viewState.copy(partnersCount = action.partnerIds.size)
+            }
+            is MainStateAction.LoadedSexFilter -> {
+                viewState.copy(sexFilter = action.sex)
             }
             is MainStateAction.LoadedStarredNames -> {
                 viewState.copy(starredNamesCount = action.count)
@@ -117,6 +132,7 @@ class MainViewModel(
         object WelcomeScreenNeeded : MainStateAction()
         class LoadedUserId(val userId: String) : MainStateAction()
         class LoadedPartners(val partnerIds: List<String>) : MainStateAction()
+        class LoadedSexFilter(val sex: Sex?) : MainStateAction()
         class LoadedStarredNames(val count: Int) : MainStateAction()
         object LoadingFinished : MainStateAction()
     }
@@ -131,5 +147,6 @@ data class MainViewState(
     val error: String? = null,
     val isLoggedIn: Boolean = false,
     val partnersCount: Int = 0,
+    val sexFilter: Sex? = null,
     val starredNamesCount: Int = 0
 ) : ViewState
