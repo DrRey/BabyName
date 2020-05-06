@@ -36,7 +36,7 @@ object ThemeComponent : FeatureComponent<ThemeDependencies>(), ThemeApi {
 
     private val themeViewModelModule = module {
         viewModel<ThemeViewModelApi> {
-            ThemeViewModel(get(), get(), get(), get())
+            ThemeViewModel(get(), get(), get(), get()).apply { init() }
         }
     }
 

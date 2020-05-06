@@ -22,10 +22,6 @@ class ThemeViewModel(
     private val saveAccentColorInteractor: SaveAccentColorInteractor
 ) : ThemeViewModelApi() {
 
-    init {
-        init()
-    }
-
     override val viewState by lazy {
         MutableLiveData<ThemeViewState>().apply {
             value = initialViewState
@@ -53,7 +49,7 @@ class ThemeViewModel(
         saveAccentColorInteractor.execute(viewModelScope, colorResId)
     }
 
-    private fun init() {
+    fun init() {
         getPrimaryColorInteractor.execute(viewModelScope, null, onError = {
             act(ThemeStateAction.PrimaryColorChanged(R.color.colorPrimary))
         }) {
