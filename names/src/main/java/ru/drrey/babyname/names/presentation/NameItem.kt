@@ -6,16 +6,25 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.item_name.view.*
 import ru.drrey.babyname.names.R
 import ru.drrey.babyname.names.domain.entity.Name
+import ru.drrey.babyname.theme.api.ThemeViewModelApi
 
-class NameItem(val name: Name, private val onClickListener: (Name, Int, Int) -> Unit) :
+class NameItem(
+    private val name: Name,
+    private val themeViewModelApi: ThemeViewModelApi,
+    private val onClickListener: (Name, Int, Int) -> Unit
+) :
     Item<ViewHolder>() {
     override fun getLayout() = R.layout.item_name
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.apply {
             nameView.text = name.displayName
-            val activeColor = ContextCompat.getColor(context, R.color.colorAccent)
-            val inactiveColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            val activeColor = ContextCompat.getColor(
+                context,
+                themeViewModelApi.accentColorResId ?: R.color.colorAccent
+            )
+            val inactiveColor = ContextCompat.getColor(context, R.color.grey)
+            nameView.setTextColor(activeColor)
             star1View.setBackgroundColor(inactiveColor)
             star2View.setBackgroundColor(inactiveColor)
             star3View.setBackgroundColor(inactiveColor)
@@ -55,5 +64,12 @@ class NameItem(val name: Name, private val onClickListener: (Name, Int, Int) -> 
         return (other as? NameItem)?.let {
             this.name == it.name
         } ?: false
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + themeViewModelApi.hashCode()
+        result = 31 * result + onClickListener.hashCode()
+        return result
     }
 }

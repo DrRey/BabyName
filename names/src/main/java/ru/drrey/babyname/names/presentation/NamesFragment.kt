@@ -11,10 +11,13 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_names.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.R
+import ru.drrey.babyname.theme.api.ThemeViewModelApi
+import ru.drrey.babyname.theme.api.ThemeViewState
 
 class NamesFragment : Fragment() {
 
@@ -24,6 +27,7 @@ class NamesFragment : Fragment() {
 
     private val namesAdapter = GroupAdapter<ViewHolder>()
     private val namesSection = Section()
+    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: NamesViewModel by sharedParentViewModel()
 
     override fun onCreateView(
@@ -33,8 +37,8 @@ class NamesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_names, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         recyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
@@ -43,6 +47,9 @@ class NamesFragment : Fragment() {
         }
         namesAdapter.add(namesSection)
 
+        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderTheme(it)
+        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
@@ -52,13 +59,17 @@ class NamesFragment : Fragment() {
         viewModel.loadNames()
     }
 
+    private fun renderTheme(themeViewState: ThemeViewState) {
+        namesSection.notifyChanged()
+    }
+
     private fun renderState(viewState: NamesViewState) {
         if (viewState.loadError != null) {
             namesSection.update(emptyList())
         } else {
             viewState.names?.let {
                 namesSection.update(it.map { name ->
-                    NameItem(name) { starredName, position, stars ->
+                    NameItem(name, themeViewModel) { starredName, position, stars ->
                         viewModel.setStars(starredName, position, stars)
                     }
                 })
