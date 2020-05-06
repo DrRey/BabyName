@@ -86,39 +86,43 @@ class MainFragment : Fragment() {
             partnersView?.text = getString(R.string.partners, viewState.partnersCount)
             namesView?.text = getString(R.string.names_starred, viewState.starredNamesCount)
         }
-        selectSexFilterButton(viewState.sexFilter)
-        when (viewState.sexFilter) {
-            Sex.BOY -> {
-                themeViewModel.onAccentColorChange(R.color.blue)
-            }
-            Sex.GIRL -> {
-                themeViewModel.onAccentColorChange(R.color.pink)
-            }
-            null -> {
-                themeViewModel.onAccentColorChange(R.color.green)
+        if (viewState.sexFilterLoaded) {
+            selectSexFilterButton(viewState.sexFilter)
+            when (viewState.sexFilter) {
+                Sex.BOY -> {
+                    themeViewModel.onAccentColorChange(R.color.blue)
+                }
+                Sex.GIRL -> {
+                    themeViewModel.onAccentColorChange(R.color.pink)
+                }
+                null -> {
+                    themeViewModel.onAccentColorChange(R.color.green)
+                }
             }
         }
     }
 
     private fun selectSexFilterButton(sexFilter: Sex?) {
-        girlSexView?.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                if (sexFilter == Sex.GIRL) themeViewModel.accentColorResId else R.color.transparent
+        themeViewModel.accentColorResId?.let { accentColorResId ->
+            girlSexView?.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (sexFilter == Sex.GIRL) accentColorResId else R.color.transparent
+                )
             )
-        )
-        boySexView?.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                if (sexFilter == Sex.BOY) themeViewModel.accentColorResId else R.color.transparent
+            boySexView?.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (sexFilter == Sex.BOY) accentColorResId else R.color.transparent
+                )
             )
-        )
-        allSexView?.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                if (sexFilter == null) themeViewModel.accentColorResId else R.color.transparent
+            allSexView?.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (sexFilter == null) accentColorResId else R.color.transparent
+                )
             )
-        )
+        }
     }
 
     private fun processEvent(viewEvent: MainViewEvent) {

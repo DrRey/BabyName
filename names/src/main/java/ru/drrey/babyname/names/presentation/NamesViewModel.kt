@@ -41,9 +41,9 @@ class NamesViewModel(
             SetStarsInteractor.Params(name, stars),
             onError = {
                 act(NamesStateAction.StarsSetError(it.message ?: ""))
-            },
-            onSuccess = { act(NamesStateAction.StarsSet(name, position, stars)) },
-            collector = {})
+            }) {
+            act(NamesStateAction.StarsSet(name, position, stars))
+        }
     }
 
     private fun reduceNamesViewState(viewState: NamesViewState, action: Action): NamesViewState {

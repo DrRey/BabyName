@@ -46,30 +46,29 @@ class MainViewModel(
                         } else {
                             act(MainStateAction.LoadError(it.message ?: ""))
                         }
-                    }, collector = {
-                        act(MainStateAction.LoadedUserId(it))
-                    }, onSuccess = {
-                        getSexFilterInteractor.execute(viewModelScope, null) {
-                            act(MainStateAction.LoadedSexFilter(it))
-                        }
-                        getPartnerIdsListInteractor.execute(
+                    }) {
+                    act(MainStateAction.LoadedUserId(it))
+                    getSexFilterInteractor.execute(viewModelScope, null) {
+                        act(MainStateAction.LoadedSexFilter(it))
+                    }
+                    getPartnerIdsListInteractor.execute(
+                        viewModelScope,
+                        null,
+                        onError = {
+                            act(MainStateAction.LoadError(it.message ?: ""))
+                        }) { partnerIds ->
+                        act(MainStateAction.LoadedPartners(partnerIds))
+                        getStarredNamesInteractor.execute(
                             viewModelScope,
                             null,
                             onError = {
                                 act(MainStateAction.LoadError(it.message ?: ""))
-                            }) { partnerIds ->
-                            act(MainStateAction.LoadedPartners(partnerIds))
-                            getStarredNamesInteractor.execute(
-                                viewModelScope,
-                                null,
-                                onError = {
-                                    act(MainStateAction.LoadError(it.message ?: ""))
-                                }) {
-                                act(MainStateAction.LoadedStarredNames(it))
-                                act(MainStateAction.LoadingFinished)
-                            }
+                            }) {
+                            act(MainStateAction.LoadedStarredNames(it))
+                            act(MainStateAction.LoadingFinished)
                         }
-                    })
+                    }
+                }
             }
         }
     }
@@ -81,15 +80,15 @@ class MainViewModel(
     }
 
     fun onSexSet(sex: Sex?) {
-        setSexFilterInteractor.execute(viewModelScope, sex, onSuccess = {
+        setSexFilterInteractor.execute(viewModelScope, sex) {
             act(MainStateAction.LoadedSexFilter(sex))
-        })
+        }
     }
 
     private fun reduceMainViewState(viewState: MainViewState, action: Action): MainViewState {
         return when (action) {
             MainStateAction.LoadingStarted -> {
-                viewState.copy(error = null)
+                viewState.copy(sexFilterLoaded = false, error = null)
             }
             is MainStateAction.LoadError -> {
                 viewState.copy(error = action.message)
@@ -101,7 +100,7 @@ class MainViewModel(
                 viewState.copy(partnersCount = action.partnerIds.size)
             }
             is MainStateAction.LoadedSexFilter -> {
-                viewState.copy(sexFilter = action.sex)
+                viewState.copy(sexFilterLoaded = true, sexFilter = action.sex)
             }
             is MainStateAction.LoadedStarredNames -> {
                 viewState.copy(starredNamesCount = action.count)
@@ -147,6 +146,7 @@ data class MainViewState(
     val error: String? = null,
     val isLoggedIn: Boolean = false,
     val partnersCount: Int = 0,
+    val sexFilterLoaded: Boolean = false,
     val sexFilter: Sex? = null,
     val starredNamesCount: Int = 0
 ) : ViewState

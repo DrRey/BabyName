@@ -37,11 +37,11 @@ class ThemeViewModel(
     override val stateReducers = listOf<Reducer<ThemeViewState>>(::reduceThemeViewState)
     override val eventActors = listOf<Actor<ThemeViewEvent>>(::actOnThemeEvent)
 
-    override val primaryColorResId: Int
-        get() = viewState.value?.primaryColorResId ?: initialViewState.primaryColorResId
+    override val primaryColorResId: Int?
+        get() = viewState.value?.primaryColorResId
 
-    override val accentColorResId: Int
-        get() = viewState.value?.accentColorResId ?: initialViewState.accentColorResId
+    override val accentColorResId: Int?
+        get() = viewState.value?.accentColorResId
 
     override fun onPrimaryColorChange(colorResId: Int) {
         act(ThemeStateAction.PrimaryColorChanged(colorResId))
@@ -54,10 +54,14 @@ class ThemeViewModel(
     }
 
     private fun init() {
-        getPrimaryColorInteractor.execute(viewModelScope, null) {
+        getPrimaryColorInteractor.execute(viewModelScope, null, onError = {
+            act(ThemeStateAction.PrimaryColorChanged(R.color.colorPrimary))
+        }) {
             act(ThemeStateAction.PrimaryColorChanged(it ?: R.color.colorPrimary))
         }
-        getAccentColorInteractor.execute(viewModelScope, null) {
+        getAccentColorInteractor.execute(viewModelScope, null, onError = {
+            act(ThemeStateAction.PrimaryColorChanged(R.color.colorAccent))
+        }) {
             act(ThemeStateAction.AccentColorChanged(it ?: R.color.colorAccent))
         }
     }

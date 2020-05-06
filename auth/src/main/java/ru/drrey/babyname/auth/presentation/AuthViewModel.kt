@@ -43,8 +43,8 @@ class AuthViewModel(
     fun onAuthComplete(userId: String) {
         setUserIdInteractor.execute(
             viewModelScope,
-            userId,
-            onSuccess = { act(AuthStateAction.AuthComplete(userId)) })
+            userId
+        ) { act(AuthStateAction.AuthComplete(userId)) }
     }
 
     fun onAuthError(t: Throwable?) {

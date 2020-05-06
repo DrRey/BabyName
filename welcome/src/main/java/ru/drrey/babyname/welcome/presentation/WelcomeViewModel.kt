@@ -35,7 +35,7 @@ class WelcomeViewModel(
             if (it is NotLoggedInException) {
                 startAuthWelcome()
             }
-        }, onSuccess = {
+        }) {
             getPartnerIdsListInteractor.execute(viewModelScope, null) {
                 if (it.isNullOrEmpty()) {
                     startPartnerWelcome()
@@ -49,7 +49,7 @@ class WelcomeViewModel(
                     }
                 }
             }
-        })
+        }
     }
 
     private fun startAuthWelcome() {
@@ -88,9 +88,9 @@ class WelcomeViewModel(
     }
 
     fun onSexSet(sex: Sex?) {
-        setSexFilterInteractor.execute(viewModelScope, sex, onSuccess = {
+        setSexFilterInteractor.execute(viewModelScope, sex) {
             finishWelcome()
-        })
+        }
     }
 
     private fun finishWelcome() {

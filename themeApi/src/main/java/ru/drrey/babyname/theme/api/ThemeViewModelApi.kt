@@ -6,8 +6,8 @@ import ru.drrey.babyname.common.presentation.base.ViewEvent
 import ru.drrey.babyname.common.presentation.base.ViewState
 
 abstract class ThemeViewModelApi : ViewModel(), StateViewModel<ThemeViewState, ThemeViewEvent> {
-    abstract val primaryColorResId: Int
-    abstract val accentColorResId: Int
+    abstract val primaryColorResId: Int?
+    abstract val accentColorResId: Int?
 
     abstract fun onPrimaryColorChange(colorResId: Int)
     abstract fun onAccentColorChange(colorResId: Int)
@@ -16,6 +16,6 @@ abstract class ThemeViewModelApi : ViewModel(), StateViewModel<ThemeViewState, T
 sealed class ThemeViewEvent : ViewEvent
 
 data class ThemeViewState(
-    val primaryColorResId: Int = R.color.colorPrimary,
-    val accentColorResId: Int = R.color.colorAccent
+    val primaryColorResId: Int? = null,
+    val accentColorResId: Int? = null
 ) : ViewState

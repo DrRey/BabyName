@@ -22,9 +22,10 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         themeViewModel.getViewState().observe(this, NonNullObserver {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                window.statusBarColor =
-                    ContextCompat.getColor(this, it.accentColorResId)
+            it.accentColorResId?.let { accentColorResId ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    window.statusBarColor = ContextCompat.getColor(this, accentColorResId)
+                }
             }
         })
 
