@@ -1,7 +1,6 @@
 package ru.drrey.babyname.auth.data
 
 import android.content.SharedPreferences
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -16,7 +15,7 @@ class AuthRepositoryImpl(private val sharedPreferences: SharedPreferences) : Aut
         sharedPreferences.edit().putString(PREFS_USER_ID, userId).apply()
         offer(Unit)
         close()
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun getUserId(): Flow<String> = flow {

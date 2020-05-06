@@ -1,7 +1,6 @@
 package ru.drrey.babyname.partners.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -23,7 +22,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     .addOnFailureListener { exception ->
                         close(exception)
                     }
-                awaitClose { cancel() }
+                awaitClose()
             }.flatMapLatest {
                 callbackFlow {
                     db.collection("partners_${partner.id}").document(userId).delete()
@@ -34,7 +33,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                         .addOnFailureListener { exception ->
                             close(exception)
                         }
-                    awaitClose { cancel() }
+                    awaitClose()
                 }
             }
         }.merge()
@@ -49,7 +48,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 .addOnFailureListener { exception ->
                     close(exception)
                 }
-            awaitClose { cancel() }
+            awaitClose()
         }.flatMapLatest {
             callbackFlow {
                 db.collection("partners_$partnerId").document(userId).set(Partner(userId))
@@ -60,7 +59,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     .addOnFailureListener { exception ->
                         close(exception)
                     }
-                awaitClose { cancel() }
+                awaitClose()
             }
         }
 
@@ -78,7 +77,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 offer(emptyList())
                 close()
             }
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>> =
@@ -96,7 +95,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     .addOnFailureListener {
                         close(it)
                     }
-                awaitClose { cancel() }
+                awaitClose()
             }
         }.merge()
 }

@@ -1,7 +1,6 @@
 package ru.drrey.babyname.names.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -23,7 +22,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             }.addOnFailureListener {
                 close(it)
             }
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun getStars(userId: String): Flow<List<NameStars>> = callbackFlow {
@@ -38,7 +37,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             }.addOnFailureListener {
                 close(it)
             }
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun setStars(userId: String, name: Name, stars: Int): Flow<Unit> = callbackFlow {
@@ -53,7 +52,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         }.addOnFailureListener {
             close(it)
         }
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun getSexFilter(userId: String): Flow<Sex?> = callbackFlow {
@@ -68,7 +67,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             }.addOnFailureListener {
                 close(it)
             }
-        awaitClose { cancel() }
+        awaitClose()
     }
 
     override fun setSexFilter(userId: String, sex: Sex?): Flow<Unit> = callbackFlow {
@@ -80,6 +79,6 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         }.addOnFailureListener {
             close(it)
         }
-        awaitClose { cancel() }
+        awaitClose()
     }
 }

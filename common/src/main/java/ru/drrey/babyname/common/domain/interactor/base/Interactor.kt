@@ -1,14 +1,11 @@
 package ru.drrey.babyname.common.domain.interactor.base
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 
 
 /**
@@ -34,15 +31,17 @@ abstract class Interactor<T, in Params> {
         finally: (() -> Unit)? = null,
         collector: ((T) -> Unit)? = null
     ) {
-        currentJob?.cancel()
+        cancel()
         val flow = buildFlow(params).flowOn(Dispatchers.Default).conflate()
         currentJob = scope.launch {
             try {
                 flow.collect { collector?.invoke(it) }
                 onSuccess?.invoke()
             } catch (e: Exception) {
-                Log.e("Interactor onError", e.toString())
-                onError?.invoke(e)
+                if (e !is CancellationException) {
+                    Log.e("Interactor onError", e.toString())
+                    onError?.invoke(e)
+                }
             } finally {
                 finally?.invoke()
             }
@@ -52,7 +51,7 @@ abstract class Interactor<T, in Params> {
     /**
      * Cancel current [Job].
      */
-    fun dispose() {
+    fun cancel() {
         if (currentJob?.isActive == true) {
             currentJob?.cancel()
         }
