@@ -8,8 +8,8 @@ import ru.drrey.babyname.partners.domain.entity.Partner
  * Partners repository
  */
 interface PartnersRepository {
-    fun clearPartners(userId: String, partners: List<Partner>): Flow<Nothing>
-    fun addPartner(userId: String, partnerId: String): Flow<Nothing>
+    fun clearPartners(userId: String, partners: List<Partner>): Flow<Unit>
+    fun addPartner(userId: String, partnerId: String): Flow<Unit>
     fun getPartnersList(userId: String): Flow<List<Partner>>
     fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>>
 }

@@ -9,9 +9,9 @@ import ru.drrey.babyname.common.domain.interactor.base.Interactor
  */
 class GetUserIdInteractor(
     private val authRepository: AuthRepository
-) : Interactor<String, Void?>() {
+) : Interactor<String, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<String> {
+    override fun buildFlow(params: Nothing?): Flow<String> {
         return authRepository.getUserId()
     }
 }

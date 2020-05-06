@@ -12,9 +12,9 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
 class SetSexFilterInteractor(
     private val namesRepository: NamesRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<Nothing, Sex?>() {
+) : Interactor<Unit, Sex?>() {
 
-    override fun buildFlow(params: Sex?): Flow<Nothing> {
+    override fun buildFlow(params: Sex?): Flow<Unit> {
         return getUserId().flatMapLatest { userId ->
             namesRepository.setSexFilter(userId, params)
         }

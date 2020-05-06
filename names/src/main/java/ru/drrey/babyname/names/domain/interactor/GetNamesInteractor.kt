@@ -11,9 +11,9 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
  */
 class GetNamesInteractor(
     private val namesRepository: NamesRepository
-) : Interactor<List<Name>, Void?>() {
+) : Interactor<List<Name>, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<List<Name>> {
+    override fun buildFlow(params: Nothing?): Flow<List<Name>> {
         return namesRepository.getNames()
             .map { it.sortedWith(compareBy({ name -> name.sex }, { name -> name.displayName })) }
     }

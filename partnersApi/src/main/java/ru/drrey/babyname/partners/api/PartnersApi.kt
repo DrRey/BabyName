@@ -9,8 +9,8 @@ import ru.drrey.babyname.navigationmediator.PartnersQrCodeFlowScreenProvider
 interface PartnersApi {
     fun getPartnersQrCodeFlowScreenProvider(): PartnersQrCodeFlowScreenProvider
     fun getAddPartnersFlowScreenProvider(): AddPartnerFlowScreenProvider
-    fun clearPartnersInteractor(): Interactor<Nothing, Void?>
-    fun getPartnerIdsListInteractor(): Interactor<List<String>, Void?>
+    fun clearPartnersInteractor(): Interactor<Unit, Nothing?>
+    fun getPartnerIdsListInteractor(): Interactor<List<String>, Nothing?>
     fun getPartnerIds(userId: String): Flow<List<String>>
     fun getPartnersStars(partnerIds: List<String>): Flow<Pair<String, List<NameStars>>>
 }

@@ -14,9 +14,9 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
 class GetNamesWithStarsInteractor(
     private val namesRepository: NamesRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<List<Name>, Void?>() {
+) : Interactor<List<Name>, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<List<Name>> {
+    override fun buildFlow(params: Nothing?): Flow<List<Name>> {
         return getUserId().flatMapLatest { userId ->
             namesRepository.getSexFilter(userId).flatMapLatest { sexFilter ->
                 namesRepository.getNames()

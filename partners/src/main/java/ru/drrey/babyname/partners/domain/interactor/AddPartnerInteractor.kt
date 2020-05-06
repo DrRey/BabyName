@@ -11,9 +11,9 @@ import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 class AddPartnerInteractor(
     private val partnersRepository: PartnersRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<Void?, String>() {
+) : Interactor<Unit, String>() {
 
-    override fun buildFlow(params: String): Flow<Void?> {
+    override fun buildFlow(params: String): Flow<Unit> {
         return getUserId().flatMapLatest { userId ->
             partnersRepository.addPartner(userId, params)
         }

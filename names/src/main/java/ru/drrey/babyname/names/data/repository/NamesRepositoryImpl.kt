@@ -41,13 +41,14 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         awaitClose { cancel() }
     }
 
-    override fun setStars(userId: String, name: Name, stars: Int): Flow<Nothing> = callbackFlow {
+    override fun setStars(userId: String, name: Name, stars: Int): Flow<Unit> = callbackFlow {
         db.collection(userId).document(name.displayName).set(
             NameStars(
                 name.displayName,
                 stars
             )
         ).addOnCompleteListener {
+            offer(Unit)
             close()
         }.addOnFailureListener {
             close(it)
@@ -70,10 +71,11 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         awaitClose { cancel() }
     }
 
-    override fun setSexFilter(userId: String, sex: Sex?): Flow<Nothing> = callbackFlow {
+    override fun setSexFilter(userId: String, sex: Sex?): Flow<Unit> = callbackFlow {
         db.collection("filters_$userId").document("sex").set(
             mapOf(Pair("sex", sex?.toString() ?: ""))
         ).addOnCompleteListener {
+            offer(Unit)
             close()
         }.addOnFailureListener {
             close(it)

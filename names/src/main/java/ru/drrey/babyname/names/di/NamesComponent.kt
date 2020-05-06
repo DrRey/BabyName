@@ -16,16 +16,17 @@ import ru.drrey.babyname.names.presentation.NamesViewModel
 import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
 object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
-    override fun countStarredNamesInteractor(): Interactor<Int, Void?> =
+    override fun countStarredNamesInteractor(): Interactor<Int, Nothing?> =
         get<CountStarredNamesInteractor>()
 
     override fun getStars(userId: String) = get<NamesRepository>().getStars(userId)
 
     override fun getFlowScreenProvider() = get<NamesFlowScreenProvider>()
 
-    override fun getSexFilterInteractor(): Interactor<Sex?, Void?> = get<GetSexFilterInteractor>()
+    override fun getSexFilterInteractor(): Interactor<Sex?, Nothing?> =
+        get<GetSexFilterInteractor>()
 
-    override fun setSexFilterInteractor(): Interactor<Nothing, Sex?> = get<SetSexFilterInteractor>()
+    override fun setSexFilterInteractor(): Interactor<Unit, Sex?> = get<SetSexFilterInteractor>()
 
     private val namesDependenciesModule = module {
         single { (authApi: AuthApi) ->

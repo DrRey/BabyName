@@ -9,9 +9,9 @@ import ru.drrey.babyname.domain.repository.MainRepository
  */
 class CheckWelcomeScreenShownInteractor(
     private val mainRepository: MainRepository
-) : Interactor<Boolean, Void?>() {
+) : Interactor<Boolean, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<Boolean> {
+    override fun buildFlow(params: Nothing?): Flow<Boolean> {
         return mainRepository.checkFirstStart()
     }
 }

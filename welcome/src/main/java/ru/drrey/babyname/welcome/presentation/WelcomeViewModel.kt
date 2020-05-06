@@ -13,10 +13,10 @@ import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.welcome.R
 
 class WelcomeViewModel(
-    private val getUserIdInteractor: Interactor<String, Void?>,
-    private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
-    private val getSexFilterInteractor: Interactor<Sex?, Void?>,
-    private val setSexFilterInteractor: Interactor<Nothing, Sex?>
+    private val getUserIdInteractor: Interactor<String, Nothing?>,
+    private val getPartnerIdsListInteractor: Interactor<List<String>, Nothing?>,
+    private val getSexFilterInteractor: Interactor<Sex?, Nothing?>,
+    private val setSexFilterInteractor: Interactor<Unit, Sex?>
 ) : ViewModel(), StateViewModel<WelcomeViewState, WelcomeViewEvent> {
 
     override val viewState by lazy {

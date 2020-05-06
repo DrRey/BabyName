@@ -16,7 +16,7 @@ import ru.drrey.babyname.navigationmediator.AuthFlowScreenProvider
 
 object AuthComponent : FeatureComponent<AuthDependencies>(), AuthApi {
     override fun getFlowScreenProvider() = get<AuthFlowScreenProvider>()
-    override fun getUserIdInteractor(): Interactor<String, Void?> = get<GetUserIdInteractor>()
+    override fun getUserIdInteractor(): Interactor<String, Nothing?> = get<GetUserIdInteractor>()
     override fun getUserId() = get<AuthRepository>().getUserId()
 
     private val authDependenciesModule = module {

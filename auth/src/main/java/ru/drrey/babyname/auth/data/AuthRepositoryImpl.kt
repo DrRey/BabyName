@@ -12,8 +12,9 @@ import ru.drrey.babyname.auth.domain.repository.AuthRepository
 const val PREFS_USER_ID = "prefs_user_id"
 
 class AuthRepositoryImpl(private val sharedPreferences: SharedPreferences) : AuthRepository {
-    override fun setUserId(userId: String): Flow<Nothing> = callbackFlow {
+    override fun setUserId(userId: String): Flow<Unit> = callbackFlow {
         sharedPreferences.edit().putString(PREFS_USER_ID, userId).apply()
+        offer(Unit)
         close()
         awaitClose { cancel() }
     }

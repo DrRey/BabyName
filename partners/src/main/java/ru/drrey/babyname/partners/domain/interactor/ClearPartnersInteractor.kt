@@ -11,9 +11,9 @@ import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 class ClearPartnersInteractor(
     private val partnersRepository: PartnersRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<Nothing, Void?>() {
+) : Interactor<Unit, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<Nothing> {
+    override fun buildFlow(params: Nothing?): Flow<Unit> {
         return getUserId().flatMapLatest { userId ->
             partnersRepository.getPartnersList(userId).flatMapLatest { partnerIds ->
                 partnersRepository.clearPartners(userId, partnerIds)

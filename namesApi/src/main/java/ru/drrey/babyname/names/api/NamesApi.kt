@@ -7,8 +7,8 @@ import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
 interface NamesApi {
     fun getFlowScreenProvider(): NamesFlowScreenProvider
-    fun countStarredNamesInteractor(): Interactor<Int, Void?>
+    fun countStarredNamesInteractor(): Interactor<Int, Nothing?>
     fun getStars(userId: String): Flow<List<NameStars>>
-    fun getSexFilterInteractor(): Interactor<Sex?, Void?>
-    fun setSexFilterInteractor(): Interactor<Nothing, Sex?>
+    fun getSexFilterInteractor(): Interactor<Sex?, Nothing?>
+    fun setSexFilterInteractor(): Interactor<Unit, Sex?>
 }

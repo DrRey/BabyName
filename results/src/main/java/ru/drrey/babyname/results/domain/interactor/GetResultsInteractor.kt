@@ -13,9 +13,9 @@ class GetResultsInteractor(
     private val getStars: (String) -> Flow<List<NameStars>>,
     private val getPartners: (String) -> Flow<List<String>>,
     private val getPartnersStars: (List<String>) -> Flow<Pair<String, List<NameStars>>>
-) : Interactor<List<Result>, Void?>() {
+) : Interactor<List<Result>, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<List<Result>> {
+    override fun buildFlow(params: Nothing?): Flow<List<Result>> {
         return getUserId().flatMapLatest { userId ->
             getStars(userId).flatMapLatest { stars ->
                 getPartners(userId).flatMapLatest { partners ->

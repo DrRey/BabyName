@@ -12,9 +12,9 @@ import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 class GetPartnersListInteractor(
     private val partnersRepository: PartnersRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<List<Partner>, Void?>() {
+) : Interactor<List<Partner>, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<List<Partner>> {
+    override fun buildFlow(params: Nothing?): Flow<List<Partner>> {
         return getUserId().flatMapLatest { userId ->
             partnersRepository.getPartnersList(userId)
         }

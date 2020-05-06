@@ -12,11 +12,12 @@ import ru.drrey.babyname.partners.domain.entity.Partner
 import ru.drrey.babyname.partners.domain.repository.PartnersRepository
 
 class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersRepository {
-    override fun clearPartners(userId: String, partners: List<Partner>): Flow<Nothing> =
+    override fun clearPartners(userId: String, partners: List<Partner>): Flow<Unit> =
         partners.map { partner ->
-            callbackFlow<Nothing> {
+            callbackFlow {
                 db.collection("partners_$userId").document(partner.id).delete()
                     .addOnSuccessListener {
+                        offer(Unit)
                         close()
                     }
                     .addOnFailureListener { exception ->
@@ -24,9 +25,10 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     }
                 awaitClose { cancel() }
             }.flatMapLatest {
-                callbackFlow<Nothing> {
+                callbackFlow {
                     db.collection("partners_${partner.id}").document(userId).delete()
                         .addOnSuccessListener {
+                            offer(Unit)
                             close()
                         }
                         .addOnFailureListener { exception ->
@@ -37,10 +39,11 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
             }
         }.merge()
 
-    override fun addPartner(userId: String, partnerId: String): Flow<Nothing> =
-        callbackFlow<Nothing> {
+    override fun addPartner(userId: String, partnerId: String): Flow<Unit> =
+        callbackFlow {
             db.collection("partners_$userId").document(partnerId).set(Partner(partnerId))
                 .addOnSuccessListener {
+                    offer(Unit)
                     close()
                 }
                 .addOnFailureListener { exception ->
@@ -48,9 +51,10 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 }
             awaitClose { cancel() }
         }.flatMapLatest {
-            callbackFlow<Nothing> {
+            callbackFlow {
                 db.collection("partners_$partnerId").document(userId).set(Partner(userId))
                     .addOnSuccessListener {
+                        offer(Unit)
                         close()
                     }
                     .addOnFailureListener { exception ->

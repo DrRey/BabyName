@@ -11,7 +11,7 @@ import ru.drrey.babyname.names.domain.entity.Name
 interface NamesRepository {
     fun getNames(): Flow<List<Name>>
     fun getStars(userId: String): Flow<List<NameStars>>
-    fun setStars(userId: String, name: Name, stars: Int): Flow<Nothing>
+    fun setStars(userId: String, name: Name, stars: Int): Flow<Unit>
     fun getSexFilter(userId: String): Flow<Sex?>
-    fun setSexFilter(userId: String, sex: Sex?): Flow<Nothing>
+    fun setSexFilter(userId: String, sex: Sex?): Flow<Unit>
 }

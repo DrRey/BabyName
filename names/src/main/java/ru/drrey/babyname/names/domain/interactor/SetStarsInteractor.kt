@@ -12,9 +12,9 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
 class SetStarsInteractor(
     private val namesRepository: NamesRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<Void, SetStarsInteractor.Params>() {
+) : Interactor<Unit, SetStarsInteractor.Params>() {
 
-    override fun buildFlow(params: Params): Flow<Nothing> {
+    override fun buildFlow(params: Params): Flow<Unit> {
         return getUserId().flatMapLatest { userId ->
             namesRepository.setStars(userId, params.name, params.stars)
         }

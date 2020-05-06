@@ -12,9 +12,9 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
 class CountStarredNamesInteractor(
     private val namesRepository: NamesRepository,
     private val getUserId: () -> Flow<String>
-) : Interactor<Int, Void?>() {
+) : Interactor<Int, Nothing?>() {
 
-    override fun buildFlow(params: Void?): Flow<Int> {
+    override fun buildFlow(params: Nothing?): Flow<Int> {
         return getUserId().flatMapLatest { userId ->
             namesRepository.getStars(userId).map { it.size }
         }

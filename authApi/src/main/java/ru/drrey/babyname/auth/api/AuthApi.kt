@@ -5,7 +5,7 @@ import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.navigationmediator.AuthFlowScreenProvider
 
 interface AuthApi {
-    fun getUserIdInteractor(): Interactor<String, Void?>
+    fun getUserIdInteractor(): Interactor<String, Nothing?>
     fun getUserId(): Flow<String>
     fun getFlowScreenProvider(): AuthFlowScreenProvider
 }

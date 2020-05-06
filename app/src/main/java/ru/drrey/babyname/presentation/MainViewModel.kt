@@ -12,12 +12,12 @@ import ru.drrey.babyname.names.api.Sex
 
 class MainViewModel(
     private val checkWelcomeScreenShownInteractor: CheckWelcomeScreenShownInteractor,
-    private val getUserIdInteractor: Interactor<String, Void?>,
-    private val getPartnerIdsListInteractor: Interactor<List<String>, Void?>,
-    private val clearPartnersInteractor: Interactor<Nothing, Void?>,
-    private val getSexFilterInteractor: Interactor<Sex?, Void?>,
-    private val setSexFilterInteractor: Interactor<Nothing, Sex?>,
-    private val getStarredNamesInteractor: Interactor<Int, Void?>
+    private val getUserIdInteractor: Interactor<String, Nothing?>,
+    private val getPartnerIdsListInteractor: Interactor<List<String>, Nothing?>,
+    private val clearPartnersInteractor: Interactor<Unit, Nothing?>,
+    private val getSexFilterInteractor: Interactor<Sex?, Nothing?>,
+    private val setSexFilterInteractor: Interactor<Unit, Sex?>,
+    private val getStarredNamesInteractor: Interactor<Int, Nothing?>
 ) : ViewModel(), StateViewModel<MainViewState, MainViewEvent> {
 
     override val viewState by lazy {
