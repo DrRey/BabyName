@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
         themeViewModel.getViewState().observe(this, NonNullObserver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 window.statusBarColor =
-                    ContextCompat.getColor(this, it.accentColorResId ?: R.color.colorAccent)
+                    ContextCompat.getColor(this, it.accentColorResId)
             }
         })
 

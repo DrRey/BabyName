@@ -23,8 +23,6 @@ class MainFragment : Fragment() {
     private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: MainViewModel by sharedParentViewModel()
 
-    private var accentColorResId: Int? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,18 +42,9 @@ class MainFragment : Fragment() {
             setOnClickListener { activity?.router?.startFlow(PartnersQrCodeFlow) }
         }
         namesView?.setOnClickListener { activity?.router?.startFlow(NamesFlow) }
-        girlSexView?.setOnClickListener {
-            viewModel.onSexSet(Sex.GIRL)
-            themeViewModel.onAccentColorChange(R.color.pink)
-        }
-        boySexView?.setOnClickListener {
-            viewModel.onSexSet(Sex.BOY)
-            themeViewModel.onAccentColorChange(R.color.blue)
-        }
-        allSexView?.setOnClickListener {
-            viewModel.onSexSet(null)
-            themeViewModel.onAccentColorChange(R.color.green)
-        }
+        girlSexView?.setOnClickListener { viewModel.onSexSet(Sex.GIRL) }
+        boySexView?.setOnClickListener { viewModel.onSexSet(Sex.BOY) }
+        allSexView?.setOnClickListener { viewModel.onSexSet(null) }
 
         themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderTheme(it)
@@ -73,7 +62,7 @@ class MainFragment : Fragment() {
     }
 
     private fun renderTheme(themeViewState: ThemeViewState) {
-        accentColorResId = themeViewState.accentColorResId
+        viewModel.invalidateViewState()
     }
 
     private fun renderState(viewState: MainViewState) {
@@ -98,28 +87,36 @@ class MainFragment : Fragment() {
             namesView?.text = getString(R.string.names_starred, viewState.starredNamesCount)
         }
         selectSexFilterButton(viewState.sexFilter)
+        when (viewState.sexFilter) {
+            Sex.BOY -> {
+                themeViewModel.onAccentColorChange(R.color.blue)
+            }
+            Sex.GIRL -> {
+                themeViewModel.onAccentColorChange(R.color.pink)
+            }
+            null -> {
+                themeViewModel.onAccentColorChange(R.color.green)
+            }
+        }
     }
 
     private fun selectSexFilterButton(sexFilter: Sex?) {
         girlSexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == Sex.GIRL) accentColorResId
-                    ?: R.color.colorAccent else R.color.transparent
+                if (sexFilter == Sex.GIRL) themeViewModel.accentColorResId else R.color.transparent
             )
         )
         boySexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == Sex.BOY) accentColorResId
-                    ?: R.color.colorAccent else R.color.transparent
+                if (sexFilter == Sex.BOY) themeViewModel.accentColorResId else R.color.transparent
             )
         )
         allSexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == null) accentColorResId
-                    ?: R.color.colorAccent else R.color.transparent
+                if (sexFilter == null) themeViewModel.accentColorResId else R.color.transparent
             )
         )
     }

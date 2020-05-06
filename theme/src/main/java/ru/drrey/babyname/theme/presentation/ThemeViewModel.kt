@@ -37,6 +37,12 @@ class ThemeViewModel(
     override val stateReducers = listOf<Reducer<ThemeViewState>>(::reduceThemeViewState)
     override val eventActors = listOf<Actor<ThemeViewEvent>>(::actOnThemeEvent)
 
+    override val primaryColorResId: Int
+        get() = viewState.value?.primaryColorResId ?: initialViewState.primaryColorResId
+
+    override val accentColorResId: Int
+        get() = viewState.value?.accentColorResId ?: initialViewState.accentColorResId
+
     override fun onPrimaryColorChange(colorResId: Int) {
         act(ThemeStateAction.PrimaryColorChanged(colorResId))
         savePrimaryColorInteractor.execute(viewModelScope, colorResId)
