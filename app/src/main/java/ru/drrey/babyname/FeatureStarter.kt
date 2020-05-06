@@ -13,6 +13,7 @@ import ru.drrey.babyname.partners.api.PartnersApi
 import ru.drrey.babyname.partners.di.PartnersComponent
 import ru.drrey.babyname.results.ResultsComponent
 import ru.drrey.babyname.results.api.ResultsApi
+import ru.drrey.babyname.theme.di.ThemeComponent
 import ru.drrey.babyname.welcome.api.WelcomeApi
 import ru.drrey.babyname.welcome.di.WelcomeComponent
 import kotlin.reflect.KClass
@@ -33,12 +34,17 @@ object FeatureStarter : FeatureProvider, KoinComponent {
 
     override fun prepareFeature(featureApiClass: KClass<*>) {
         when (featureApiClass.qualifiedName) {
+            ThemeComponent::class.qualifiedName -> initThemeFeature()
             MainComponent::class.qualifiedName -> initMainFeature()
             AuthApi::class.qualifiedName -> getAuthFeature()
             NamesApi::class.qualifiedName -> getNamesFeature()
             PartnersApi::class.qualifiedName -> getPartnersFeature()
             ResultsApi::class.qualifiedName -> getResultsFeature()
         }
+    }
+
+    fun initThemeFeature() {
+        ThemeComponent.load()?.init(get())
     }
 
     fun initMainFeature() {

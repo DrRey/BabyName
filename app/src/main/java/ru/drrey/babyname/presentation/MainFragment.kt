@@ -8,16 +8,22 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.*
+import ru.drrey.babyname.theme.api.ThemeViewModelApi
+import ru.drrey.babyname.theme.api.ThemeViewState
 
 class MainFragment : Fragment() {
 
+    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: MainViewModel by sharedParentViewModel()
+
+    private var accentColorResId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +44,22 @@ class MainFragment : Fragment() {
             setOnClickListener { activity?.router?.startFlow(PartnersQrCodeFlow) }
         }
         namesView?.setOnClickListener { activity?.router?.startFlow(NamesFlow) }
-        girlSexView?.setOnClickListener { viewModel.onSexSet(Sex.GIRL) }
-        boySexView?.setOnClickListener { viewModel.onSexSet(Sex.BOY) }
-        allSexView?.setOnClickListener { viewModel.onSexSet(null) }
+        girlSexView?.setOnClickListener {
+            viewModel.onSexSet(Sex.GIRL)
+            themeViewModel.onAccentColorChange(R.color.pink)
+        }
+        boySexView?.setOnClickListener {
+            viewModel.onSexSet(Sex.BOY)
+            themeViewModel.onAccentColorChange(R.color.blue)
+        }
+        allSexView?.setOnClickListener {
+            viewModel.onSexSet(null)
+            themeViewModel.onAccentColorChange(R.color.green)
+        }
 
+        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderTheme(it)
+        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
@@ -52,6 +70,10 @@ class MainFragment : Fragment() {
         if (savedInstanceState == null) {
             viewModel.loadData()
         }
+    }
+
+    private fun renderTheme(themeViewState: ThemeViewState) {
+        accentColorResId = themeViewState.accentColorResId
     }
 
     private fun renderState(viewState: MainViewState) {
@@ -82,19 +104,22 @@ class MainFragment : Fragment() {
         girlSexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == Sex.GIRL) R.color.colorAccent else R.color.transparent
+                if (sexFilter == Sex.GIRL) accentColorResId
+                    ?: R.color.colorAccent else R.color.transparent
             )
         )
         boySexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == Sex.BOY) R.color.colorAccent else R.color.transparent
+                if (sexFilter == Sex.BOY) accentColorResId
+                    ?: R.color.colorAccent else R.color.transparent
             )
         )
         allSexView?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (sexFilter == null) R.color.colorAccent else R.color.transparent
+                if (sexFilter == null) accentColorResId
+                    ?: R.color.colorAccent else R.color.transparent
             )
         )
     }

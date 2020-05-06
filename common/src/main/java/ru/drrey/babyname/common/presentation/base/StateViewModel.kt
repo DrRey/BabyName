@@ -20,6 +20,10 @@ interface StateViewModel<T : ViewState, Z : ViewEvent> {
     fun getViewState(): LiveData<T> = viewState
     fun getViewEvent(): LiveData<Z> = viewEvent
 
+    fun invalidateViewState() {
+        viewState.value = viewState.value
+    }
+
     fun act(action: Action) {
         eventActors.forEach { actor ->
             actor(action)?.let {

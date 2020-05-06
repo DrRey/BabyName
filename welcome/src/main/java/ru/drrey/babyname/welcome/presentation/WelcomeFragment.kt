@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_welcome.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
@@ -13,10 +14,12 @@ import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.AddPartnerFlow
 import ru.drrey.babyname.navigation.AuthFlow
 import ru.drrey.babyname.navigation.PartnersQrCodeFlow
+import ru.drrey.babyname.theme.api.ThemeViewModelApi
 import ru.drrey.babyname.welcome.R
 
 class WelcomeFragment : Fragment() {
 
+    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: WelcomeViewModel by sharedParentViewModel()
 
     override fun onCreateView(
@@ -44,15 +47,24 @@ class WelcomeFragment : Fragment() {
 
         girlSexView?.apply {
             text = getString(R.string.girl)
-            setOnClickListener { viewModel.onSexSet(Sex.GIRL) }
+            setOnClickListener {
+                viewModel.onSexSet(Sex.GIRL)
+                themeViewModel.onAccentColorChange(R.color.pink)
+            }
         }
         boySexView?.apply {
             text = getString(R.string.boy)
-            setOnClickListener { viewModel.onSexSet(Sex.BOY) }
+            setOnClickListener {
+                viewModel.onSexSet(Sex.BOY)
+                themeViewModel.onAccentColorChange(R.color.blue)
+            }
         }
         noSexView?.apply {
             text = getString(R.string.dont_know_yet)
-            setOnClickListener { viewModel.onSexSet(null) }
+            setOnClickListener {
+                viewModel.onSexSet(null)
+                themeViewModel.onAccentColorChange(R.color.green)
+            }
         }
 
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
