@@ -13,5 +13,6 @@ dependencies {
     implementation project(path: ':navigation')
     implementation project(path: ':navigationmediator')
     implementation project(path: ':authApi')
+    implementation project(path: ':themeApi')
     implementation project(path: ':partnersApi')
 }

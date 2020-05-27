@@ -5,21 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_names.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.R
-import ru.drrey.babyname.theme.api.ThemeViewModelApi
 import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.theme.api.ThemedFragment
 
-class NamesFragment : Fragment() {
+class NamesFragment : ThemedFragment() {
 
     companion object {
         fun newInstance() = NamesFragment()
@@ -27,7 +25,6 @@ class NamesFragment : Fragment() {
 
     private val namesAdapter = GroupAdapter<ViewHolder>()
     private val namesSection = Section()
-    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: NamesViewModel by sharedParentViewModel()
 
     override fun onCreateView(
@@ -59,7 +56,7 @@ class NamesFragment : Fragment() {
         viewModel.loadNames()
     }
 
-    private fun renderTheme(themeViewState: ThemeViewState) {
+    override fun renderTheme(themeViewState: ThemeViewState) {
         namesSection.notifyChanged()
     }
 

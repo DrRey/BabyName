@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.fragment_partners_qr_code.*
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.doOnMeasure
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.partners.R
+import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.theme.api.ThemedFragment
 
 
-class PartnersQrCodeFragment : Fragment() {
+class PartnersQrCodeFragment : ThemedFragment() {
 
     companion object {
         fun newInstance() = PartnersQrCodeFragment()
@@ -34,11 +36,25 @@ class PartnersQrCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
+            renderTheme(it)
+        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
 
         viewModel.loadUserData()
+    }
+
+    override fun renderTheme(themeViewState: ThemeViewState) {
+        themeViewState.accentColorResId?.let { accentColorResId ->
+            parentLayout?.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    accentColorResId
+                )
+            )
+        }
     }
 
     private fun renderState(viewState: PartnersViewState) {

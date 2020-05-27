@@ -6,21 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.R
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.*
-import ru.drrey.babyname.theme.api.ThemeViewModelApi
 import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.theme.api.ThemedFragment
 
-class MainFragment : Fragment() {
+class MainFragment : ThemedFragment() {
 
-    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: MainViewModel by sharedParentViewModel()
 
     override fun onCreateView(
@@ -61,7 +58,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun renderTheme(themeViewState: ThemeViewState) {
+    override fun renderTheme(themeViewState: ThemeViewState) {
         viewModel.invalidateViewState()
     }
 

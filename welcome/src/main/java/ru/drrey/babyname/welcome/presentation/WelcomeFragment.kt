@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_welcome.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
@@ -14,12 +12,12 @@ import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.AddPartnerFlow
 import ru.drrey.babyname.navigation.AuthFlow
 import ru.drrey.babyname.navigation.PartnersQrCodeFlow
-import ru.drrey.babyname.theme.api.ThemeViewModelApi
+import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.theme.api.ThemedFragment
 import ru.drrey.babyname.welcome.R
 
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : ThemedFragment() {
 
-    private val themeViewModel: ThemeViewModelApi by sharedViewModel()
     private val viewModel: WelcomeViewModel by sharedParentViewModel()
 
     override fun onCreateView(
@@ -74,6 +72,10 @@ class WelcomeFragment : Fragment() {
             actOnEvent(it)
         })
         viewModel.startWelcome()
+    }
+
+    override fun renderTheme(themeViewState: ThemeViewState) {
+
     }
 
     private fun renderState(viewState: WelcomeViewState) {
