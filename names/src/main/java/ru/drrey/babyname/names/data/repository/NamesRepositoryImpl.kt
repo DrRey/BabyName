@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
 import ru.drrey.babyname.common.domain.entity.NameStars
 import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.names.domain.entity.Name
@@ -14,7 +15,9 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         db.collection("names").get()
             .addOnSuccessListener { names ->
                 try {
-                    offer(names.toObjects(Name::class.java).toList())
+                    if (isActive) {
+                        offer(names.toObjects(Name::class.java).toList())
+                    }
                     close()
                 } catch (e: Exception) {
                     close(e)
@@ -29,7 +32,9 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         db.collection(userId).get()
             .addOnSuccessListener { stars ->
                 try {
-                    offer(stars.toObjects(NameStars::class.java).toList())
+                    if (isActive) {
+                        offer(stars.toObjects(NameStars::class.java).toList())
+                    }
                     close()
                 } catch (e: Exception) {
                     close(e)
@@ -47,7 +52,9 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
                 stars
             )
         ).addOnCompleteListener {
-            offer(Unit)
+            if (isActive) {
+                offer(Unit)
+            }
             close()
         }.addOnFailureListener {
             close(it)
@@ -58,11 +65,13 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
     override fun getSexFilter(userId: String): Flow<Sex?> = callbackFlow {
         db.collection("filters_$userId").document("sex").get()
             .addOnSuccessListener { doc ->
-                offer(
-                    doc.get("sex")
-                        ?.takeIf { it.toString().isNotEmpty() }
-                        ?.let { Sex.valueOf(it.toString()) }
-                )
+                if (isActive) {
+                    offer(
+                        doc.get("sex")
+                            ?.takeIf { it.toString().isNotEmpty() }
+                            ?.let { Sex.valueOf(it.toString()) }
+                    )
+                }
                 close()
             }.addOnFailureListener {
                 close(it)
@@ -74,7 +83,9 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         db.collection("filters_$userId").document("sex").set(
             mapOf(Pair("sex", sex?.toString() ?: ""))
         ).addOnCompleteListener {
-            offer(Unit)
+            if (isActive) {
+                offer(Unit)
+            }
             close()
         }.addOnFailureListener {
             close(it)

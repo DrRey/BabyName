@@ -5,6 +5,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import ru.drrey.babyname.auth.api.NotLoggedInException
 import ru.drrey.babyname.auth.domain.repository.AuthRepository
 
@@ -13,7 +14,9 @@ const val PREFS_USER_ID = "prefs_user_id"
 class AuthRepositoryImpl(private val sharedPreferences: SharedPreferences) : AuthRepository {
     override fun setUserId(userId: String): Flow<Unit> = callbackFlow {
         sharedPreferences.edit().putString(PREFS_USER_ID, userId).apply()
-        offer(Unit)
+        if (isActive) {
+            offer(Unit)
+        }
         close()
         awaitClose()
     }
