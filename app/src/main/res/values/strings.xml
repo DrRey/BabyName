@@ -6,4 +6,5 @@
     <string name="partners">Partners: %1$d</string>
     <string name="add_partner">Add partner</string>
     <string name="show_partner_qr">Show QR code for partner</string>
+    <string name="results">Results</string>
 </resources>

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
@@ -14,8 +13,10 @@ import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.results.R
+import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.theme.api.ThemedFragment
 
-class ResultsFragment : Fragment() {
+class ResultsFragment : ThemedFragment() {
 
     companion object {
         fun newInstance() = ResultsFragment()
@@ -48,12 +49,21 @@ class ResultsFragment : Fragment() {
         viewModel.loadResults()
     }
 
+    override fun renderTheme(themeViewState: ThemeViewState) {
+
+    }
+
     private fun renderState(viewState: ResultsViewState) {
         if (viewState.error != null) {
             resultsSection.update(emptyList())
         } else {
             viewState.results?.let {
-                resultsSection.update(it.map { result -> ResultItem(result) })
+                resultsSection.update(it.map { result ->
+                    ResultItem(
+                        result,
+                        themeViewModel.accentColorResId
+                    )
+                })
             }
         }
     }

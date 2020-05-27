@@ -30,6 +30,10 @@ class MainFragment : ThemedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        resultsView?.apply {
+            text = getString(R.string.results)
+            setOnClickListener { activity?.router?.startFlow(ResultsFlow) }
+        }
         addPartnerView?.apply {
             text = getString(R.string.add_partner)
             setOnClickListener { activity?.router?.startFlow(AddPartnerFlow) }

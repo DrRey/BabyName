@@ -6,4 +6,5 @@
     <string name="partners">Партнёров: %1$d</string>
     <string name="add_partner">Добавить партнёра</string>
     <string name="show_partner_qr">Показать QR-код для партнёра</string>
+    <string name="results">Результаты</string>
 </resources>

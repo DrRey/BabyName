@@ -58,8 +58,15 @@
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:minHeight="64dp"
-            app:layout_constraintBottom_toTopOf="@id/partnersView"
+            app:layout_constraintBottom_toTopOf="@id/resultsView"
             app:layout_constraintTop_toBottomOf="@id/girlSexView" />
+
+        <ru.drrey.babyname.common.presentation.ButtonView
+            android:id="@+id/resultsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toTopOf="@id/partnersView" />
 
         <ru.drrey.babyname.common.presentation.ButtonView
             android:id="@+id/partnersView"

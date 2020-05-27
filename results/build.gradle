@@ -15,5 +15,6 @@ dependencies {
     implementation project(path: ':authApi')
     implementation project(path: ':namesApi')
     implementation project(path: ':partnersApi')
+    implementation project(path: ':themeApi')
     implementation project(path: ':resultsApi')
 }
