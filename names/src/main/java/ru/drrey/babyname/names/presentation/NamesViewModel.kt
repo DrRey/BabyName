@@ -36,14 +36,15 @@ class NamesViewModel(
     }
 
     fun setStars(name: Name, position: Int, stars: Int) {
+        val oldStars = viewState.value?.names?.getOrNull(position)?.stars
+        act(NamesStateAction.StarsSet(name, position, stars))
         setStarsInteractor.execute(
             viewModelScope,
             SetStarsInteractor.Params(name, stars),
             onError = {
+                act(NamesStateAction.StarsSet(name, position, oldStars))
                 act(NamesStateAction.StarsSetError(it.message ?: ""))
-            }) {
-            act(NamesStateAction.StarsSet(name, position, stars))
-        }
+            })
     }
 
     private fun reduceNamesViewState(viewState: NamesViewState, action: Action): NamesViewState {
@@ -96,7 +97,7 @@ class NamesViewModel(
         object NamesLoading : NamesStateAction()
         class NamesLoaded(val names: List<Name>) : NamesStateAction()
         class NamesLoadError(val message: String) : NamesStateAction()
-        class StarsSet(val name: Name, val position: Int, val stars: Int) : NamesStateAction()
+        class StarsSet(val name: Name, val position: Int, val stars: Int?) : NamesStateAction()
         class StarsSetError(val error: String) : NamesStateAction()
     }
 }
