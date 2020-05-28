@@ -9,6 +9,7 @@ class NavigationMediatorImpl(private val featureProvider: FeatureProvider) : Nav
         return when (flow) {
             WelcomeFlow -> featureProvider.welcomeFlowScreenProvider.getScreen()
             AuthFlow -> featureProvider.authFlowScreenProvider.getScreen()
+            FilterFlow -> featureProvider.filterFlowScreenProvider.getScreen()
             NamesFlow -> featureProvider.namesFlowScreenProvider.getScreen()
             PartnersQrCodeFlow -> featureProvider.partnersQrCodeFlowScreenProvider.getScreen()
             AddPartnerFlow -> featureProvider.addPartnerFlowScreenProvider.getScreen()

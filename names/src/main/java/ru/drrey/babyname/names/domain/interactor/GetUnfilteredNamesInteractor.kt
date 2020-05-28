@@ -3,16 +3,17 @@ package ru.drrey.babyname.names.domain.interactor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
+import ru.drrey.babyname.names.domain.entity.Name
 
 /**
- * Count names with stars interactor
+ * Get unfiltered names interactor
  */
-class CountStarredNamesInteractor(
+class GetUnfilteredNamesInteractor(
     private val getNamesWithStarsInteractor: GetNamesWithStarsInteractor
-) : Interactor<Int, Nothing?>() {
+) : Interactor<List<Name>, Nothing?>() {
 
-    override fun buildFlow(params: Nothing?): Flow<Int> {
+    override fun buildFlow(params: Nothing?): Flow<List<Name>> {
         return getNamesWithStarsInteractor.buildFlow(null)
-            .map { it.filter { name -> (name.stars ?: -1) >= 0 }.count() }
+            .map { it.filter { name -> name.stars == null } }
     }
 }

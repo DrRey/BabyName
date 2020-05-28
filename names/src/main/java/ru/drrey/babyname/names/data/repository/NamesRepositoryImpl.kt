@@ -16,7 +16,8 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             .addOnSuccessListener { names ->
                 try {
                     if (isActive) {
-                        offer(names.toObjects(Name::class.java).toList())
+                        offer(names.toObjects(Name::class.java)
+                            .filter { (it.stars ?: 0) >= 0 })
                     }
                     close()
                 } catch (e: Exception) {
@@ -92,4 +93,22 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         }
         awaitClose()
     }
+
+    override fun setNameFilter(userId: String, name: Name, allow: Boolean): Flow<Unit> =
+        callbackFlow {
+            db.collection(userId).document(name.displayName).set(
+                NameStars(
+                    name.displayName,
+                    if (allow) 0 else -1
+                )
+            ).addOnCompleteListener {
+                if (isActive) {
+                    offer(Unit)
+                }
+                close()
+            }.addOnFailureListener {
+                close(it)
+            }
+            awaitClose()
+        }
 }

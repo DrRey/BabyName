@@ -17,7 +17,8 @@ class MainViewModel(
     private val clearPartnersInteractor: Interactor<Unit, Nothing?>,
     private val getSexFilterInteractor: Interactor<Sex?, Nothing?>,
     private val setSexFilterInteractor: Interactor<Unit, Sex?>,
-    private val getStarredNamesInteractor: Interactor<Int, Nothing?>
+    private val getStarredNamesInteractor: Interactor<Int, Nothing?>,
+    private val countUnfilteredNamesInteractor: Interactor<Int, Nothing?>
 ) : ViewModel(), StateViewModel<MainViewState, MainViewEvent> {
 
     override val viewState by lazy {
@@ -40,32 +41,38 @@ class MainViewModel(
                 getUserIdInteractor.execute(
                     viewModelScope,
                     null,
-                    onError = {
-                        if (it is NotLoggedInException) {
+                    onError = { error ->
+                        if (error is NotLoggedInException) {
                             act(MainStateAction.LoadingFinished)
                         } else {
-                            act(MainStateAction.LoadError(it.message ?: ""))
+                            act(MainStateAction.LoadError(error.message ?: ""))
                         }
-                    }) {
-                    act(MainStateAction.LoadedUserId(it))
-                    getSexFilterInteractor.execute(viewModelScope, null) {
-                        act(MainStateAction.LoadedSexFilter(it))
+                    }) { userId ->
+                    act(MainStateAction.LoadedUserId(userId))
+                    getSexFilterInteractor.execute(viewModelScope, null) { sexFilter ->
+                        act(MainStateAction.LoadedSexFilter(sexFilter))
                     }
                     getPartnerIdsListInteractor.execute(
                         viewModelScope,
                         null,
-                        onError = {
-                            act(MainStateAction.LoadError(it.message ?: ""))
+                        onError = { error ->
+                            act(MainStateAction.LoadError(error.message ?: ""))
                         }) { partnerIds ->
                         act(MainStateAction.LoadedPartners(partnerIds))
-                        getStarredNamesInteractor.execute(
-                            viewModelScope,
-                            null,
-                            onError = {
-                                act(MainStateAction.LoadError(it.message ?: ""))
-                            }) {
-                            act(MainStateAction.LoadedStarredNames(it))
-                            act(MainStateAction.LoadingFinished)
+                        countUnfilteredNamesInteractor.execute(viewModelScope, null,
+                            onError = { error ->
+                                act(MainStateAction.LoadError(error.message ?: ""))
+                            }) { unfilteredNamesCount ->
+                            act(MainStateAction.LoadedUnfilteredNames(unfilteredNamesCount))
+                            getStarredNamesInteractor.execute(
+                                viewModelScope,
+                                null,
+                                onError = { error ->
+                                    act(MainStateAction.LoadError(error.message ?: ""))
+                                }) { starredNames ->
+                                act(MainStateAction.LoadedStarredNames(starredNames))
+                                act(MainStateAction.LoadingFinished)
+                            }
                         }
                     }
                 }
@@ -82,16 +89,17 @@ class MainViewModel(
     fun onSexSet(sex: Sex?) {
         setSexFilterInteractor.execute(viewModelScope, sex) {
             act(MainStateAction.LoadedSexFilter(sex))
+            loadData()
         }
     }
 
     private fun reduceMainViewState(viewState: MainViewState, action: Action): MainViewState {
         return when (action) {
             MainStateAction.LoadingStarted -> {
-                viewState.copy(sexFilterLoaded = false, error = null)
+                viewState.copy(sexFilterLoaded = false, error = null, isLoadingData = true)
             }
             is MainStateAction.LoadError -> {
-                viewState.copy(error = action.message)
+                viewState.copy(error = action.message, isLoadingData = false)
             }
             is MainStateAction.LoadedUserId -> {
                 viewState.copy(isLoggedIn = true)
@@ -102,11 +110,14 @@ class MainViewModel(
             is MainStateAction.LoadedSexFilter -> {
                 viewState.copy(sexFilterLoaded = true, sexFilter = action.sex)
             }
+            is MainStateAction.LoadedUnfilteredNames -> {
+                viewState.copy(unfilteredNamesCount = action.count)
+            }
             is MainStateAction.LoadedStarredNames -> {
                 viewState.copy(starredNamesCount = action.count)
             }
             MainStateAction.LoadingFinished -> {
-                viewState.copy(showOverlay = false)
+                viewState.copy(showOverlay = false, isLoadingData = false)
             }
             else -> {
                 viewState
@@ -132,6 +143,7 @@ class MainViewModel(
         class LoadedUserId(val userId: String) : MainStateAction()
         class LoadedPartners(val partnerIds: List<String>) : MainStateAction()
         class LoadedSexFilter(val sex: Sex?) : MainStateAction()
+        class LoadedUnfilteredNames(val count: Int) : MainStateAction()
         class LoadedStarredNames(val count: Int) : MainStateAction()
         object LoadingFinished : MainStateAction()
     }
@@ -142,11 +154,13 @@ sealed class MainViewEvent : ViewEvent {
 }
 
 data class MainViewState(
+    val isLoadingData: Boolean = false,
     val showOverlay: Boolean = true,
     val error: String? = null,
     val isLoggedIn: Boolean = false,
     val partnersCount: Int = 0,
     val sexFilterLoaded: Boolean = false,
     val sexFilter: Sex? = null,
+    val unfilteredNamesCount: Int = 0,
     val starredNamesCount: Int = 0
 ) : ViewState

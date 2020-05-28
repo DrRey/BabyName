@@ -44,9 +44,6 @@ class NamesFragment : ThemedFragment() {
         }
         namesAdapter.add(namesSection)
 
-        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
-            renderTheme(it)
-        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })

@@ -14,4 +14,5 @@ interface NamesRepository {
     fun setStars(userId: String, name: Name, stars: Int): Flow<Unit>
     fun getSexFilter(userId: String): Flow<Sex?>
     fun setSexFilter(userId: String, sex: Sex?): Flow<Unit>
+    fun setNameFilter(userId: String, name: Name, allow: Boolean): Flow<Unit>
 }

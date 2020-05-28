@@ -3,6 +3,7 @@ package ru.drrey.babyname.navigation
 sealed class Flow
 object WelcomeFlow : Flow()
 object AuthFlow : Flow()
+object FilterFlow : Flow()
 object NamesFlow : Flow()
 object PartnersQrCodeFlow : Flow()
 object AddPartnerFlow : Flow()

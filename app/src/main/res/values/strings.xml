@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">BabyName</string>
     <string name="logged_in">Logged in</string>
     <string name="login">Login</string>
+    <string name="names_unfiltered">Names to filter: %1$d</string>
     <string name="names_starred">Names starred: %1$d</string>
     <string name="partners">Partners: %1$d</string>
     <string name="add_partner">Add partner</string>

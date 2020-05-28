@@ -23,8 +23,10 @@ object FeatureStarter : FeatureProvider, KoinComponent {
         get() = getWelcomeFeature().getFlowScreenProvider()
     override val authFlowScreenProvider: AuthFlowScreenProvider
         get() = getAuthFeature().getFlowScreenProvider()
+    override val filterFlowScreenProvider: FilterFlowScreenProvider
+        get() = getNamesFeature().getFilterFlowScreenProvider()
     override val namesFlowScreenProvider: NamesFlowScreenProvider
-        get() = getNamesFeature().getFlowScreenProvider()
+        get() = getNamesFeature().getNamesFlowScreenProvider()
     override val partnersQrCodeFlowScreenProvider: PartnersQrCodeFlowScreenProvider
         get() = getPartnersFeature().getPartnersQrCodeFlowScreenProvider()
     override val addPartnerFlowScreenProvider: AddPartnerFlowScreenProvider

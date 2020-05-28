@@ -42,14 +42,10 @@ class MainFragment : ThemedFragment() {
             text = getString(R.string.show_partner_qr)
             setOnClickListener { activity?.router?.startFlow(PartnersQrCodeFlow) }
         }
-        namesView?.setOnClickListener { activity?.router?.startFlow(NamesFlow) }
         girlSexView?.setOnClickListener { viewModel.onSexSet(Sex.GIRL) }
         boySexView?.setOnClickListener { viewModel.onSexSet(Sex.BOY) }
         allSexView?.setOnClickListener { viewModel.onSexSet(null) }
 
-        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
-            renderTheme(it)
-        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
@@ -85,7 +81,16 @@ class MainFragment : ThemedFragment() {
                 }
             }
             partnersView?.text = getString(R.string.partners, viewState.partnersCount)
-            namesView?.text = getString(R.string.names_starred, viewState.starredNamesCount)
+            namesView?.apply {
+                visibility = if (viewState.isLoadingData) View.GONE else View.VISIBLE
+                if (viewState.unfilteredNamesCount > 0) {
+                    text = getString(R.string.names_unfiltered, viewState.unfilteredNamesCount)
+                    setOnClickListener { activity?.router?.startFlow(FilterFlow) }
+                } else {
+                    text = getString(R.string.names_starred, viewState.starredNamesCount)
+                    setOnClickListener { activity?.router?.startFlow(NamesFlow) }
+                }
+            }
         }
         if (viewState.sexFilterLoaded) {
             selectSexFilterButton(viewState.sexFilter)

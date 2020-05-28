@@ -11,8 +11,11 @@ import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.names.data.repository.NamesRepositoryImpl
 import ru.drrey.babyname.names.domain.interactor.*
 import ru.drrey.babyname.names.domain.repository.NamesRepository
+import ru.drrey.babyname.names.navigation.FilterFlowScreenProviderImpl
 import ru.drrey.babyname.names.navigation.NamesFlowScreenProviderImpl
+import ru.drrey.babyname.names.presentation.FilterViewModel
 import ru.drrey.babyname.names.presentation.NamesViewModel
+import ru.drrey.babyname.navigationmediator.FilterFlowScreenProvider
 import ru.drrey.babyname.navigationmediator.NamesFlowScreenProvider
 
 object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
@@ -21,12 +24,17 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
 
     override fun getStars(userId: String) = get<NamesRepository>().getStars(userId)
 
-    override fun getFlowScreenProvider() = get<NamesFlowScreenProvider>()
+    override fun getNamesFlowScreenProvider() = get<NamesFlowScreenProvider>()
+
+    override fun getFilterFlowScreenProvider() = get<FilterFlowScreenProvider>()
 
     override fun getSexFilterInteractor(): Interactor<Sex?, Nothing?> =
         get<GetSexFilterInteractor>()
 
     override fun setSexFilterInteractor(): Interactor<Unit, Sex?> = get<SetSexFilterInteractor>()
+
+    override fun countUnfilteredNamesInteractor(): Interactor<Int, Nothing?> =
+        get<CountUnfilteredNamesInteractor>()
 
     private val namesDependenciesModule = module {
         single { (authApi: AuthApi) ->
@@ -40,6 +48,7 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
 
     private val namesNavigationModule = module {
         single<NamesFlowScreenProvider> { NamesFlowScreenProviderImpl() }
+        single<FilterFlowScreenProvider> { FilterFlowScreenProviderImpl() }
     }
 
     private val namesRepositoryModule = module {
@@ -47,17 +56,17 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
     }
 
     private val namesInteractorModule = module {
-        factory { GetNamesInteractor(get()) }
+        factory { GetNamesInteractor(get(), get()) }
         factory {
             GetNamesWithStarsInteractor(
                 get(),
-                get<NamesDependencies>().authApi::getUserId
+                get<NamesDependencies>().authApi::getUserId,
+                get()
             )
         }
         factory {
             CountStarredNamesInteractor(
-                get(),
-                get<NamesDependencies>().authApi::getUserId
+                get()
             )
         }
         factory {
@@ -78,10 +87,26 @@ object NamesComponent : FeatureComponent<NamesDependencies>(), NamesApi {
                 get<NamesDependencies>().authApi::getUserId
             )
         }
+        factory {
+            GetUnfilteredNamesInteractor(get())
+        }
+        factory {
+            CountUnfilteredNamesInteractor(get())
+        }
+        factory {
+            GetFilteredNamesInteractor(get())
+        }
+        factory {
+            SetNameFilterInteractor(
+                get(),
+                get<NamesDependencies>().authApi::getUserId
+            )
+        }
     }
 
     private val namesViewModelModule = module {
         viewModel { NamesViewModel(get(), get()) }
+        viewModel { FilterViewModel(get(), get()) }
     }
 
     override val modules = listOf(

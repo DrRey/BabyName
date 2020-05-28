@@ -6,6 +6,7 @@ interface FeatureProvider {
     fun prepareFeature(featureApiClass: KClass<*>)
     val welcomeFlowScreenProvider: WelcomeFlowScreenProvider
     val authFlowScreenProvider: AuthFlowScreenProvider
+    val filterFlowScreenProvider: FilterFlowScreenProvider
     val namesFlowScreenProvider: NamesFlowScreenProvider
     val partnersQrCodeFlowScreenProvider: PartnersQrCodeFlowScreenProvider
     val addPartnerFlowScreenProvider: AddPartnerFlowScreenProvider

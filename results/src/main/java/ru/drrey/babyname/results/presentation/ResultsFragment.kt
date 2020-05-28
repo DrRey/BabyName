@@ -13,7 +13,6 @@ import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.results.R
-import ru.drrey.babyname.theme.api.ThemeViewState
 import ru.drrey.babyname.theme.api.ThemedFragment
 
 class ResultsFragment : ThemedFragment() {
@@ -47,10 +46,6 @@ class ResultsFragment : ThemedFragment() {
             renderState(it)
         })
         viewModel.loadResults()
-    }
-
-    override fun renderTheme(themeViewState: ThemeViewState) {
-
     }
 
     private fun renderState(viewState: ResultsViewState) {

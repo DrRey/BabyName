@@ -13,12 +13,13 @@ import ru.drrey.babyname.names.domain.repository.NamesRepository
  */
 class GetNamesWithStarsInteractor(
     private val namesRepository: NamesRepository,
-    private val getUserId: () -> Flow<String>
+    private val getUserId: () -> Flow<String>,
+    private val getSexFilterInteractor: GetSexFilterInteractor
 ) : Interactor<List<Name>, Nothing?>() {
 
     override fun buildFlow(params: Nothing?): Flow<List<Name>> {
         return getUserId().flatMapLatest { userId ->
-            namesRepository.getSexFilter(userId).flatMapLatest { sexFilter ->
+            getSexFilterInteractor.buildFlow(null).flatMapLatest { sexFilter ->
                 namesRepository.getNames()
                     .map { if (sexFilter == null) it else it.filter { name -> name.sex == sexFilter } }
                     .zip(namesRepository.getStars(userId)) { namesList, starsList ->

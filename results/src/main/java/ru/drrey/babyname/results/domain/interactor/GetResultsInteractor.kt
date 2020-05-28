@@ -26,6 +26,7 @@ class GetResultsInteractor(
                                 .associateBy({ it.first }, { it.second })
                                 .values.asSequence() //getting just the values sequence -> Collection<List<NameStars>>
                                 .flatten() //getting the whole list of stars -> List<NameStars>
+                                .filter { (it.stars ?: 0) >= 0 } //removing filtered names
                                 .groupBy(  //grouping by name and stars -> Map<String, List<Int>>
                                     { nameStars -> nameStars.name },
                                     { nameStars ->

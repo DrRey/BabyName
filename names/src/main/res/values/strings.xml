@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">names</string>
+    <string name="app_name" translatable="false">names</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

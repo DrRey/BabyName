@@ -5,14 +5,13 @@ import kotlinx.coroutines.flow.map
 import ru.drrey.babyname.common.domain.interactor.base.Interactor
 
 /**
- * Count names with stars interactor
+ * Count unfiltered names interactor
  */
-class CountStarredNamesInteractor(
-    private val getNamesWithStarsInteractor: GetNamesWithStarsInteractor
+class CountUnfilteredNamesInteractor(
+    private val getUnfilteredNamesInteractor: GetUnfilteredNamesInteractor
 ) : Interactor<Int, Nothing?>() {
 
     override fun buildFlow(params: Nothing?): Flow<Int> {
-        return getNamesWithStarsInteractor.buildFlow(null)
-            .map { it.filter { name -> (name.stars ?: -1) >= 0 }.count() }
+        return getUnfilteredNamesInteractor.buildFlow(null).map { it.count() }
     }
 }

@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import ru.drrey.babyname.common.presentation.base.*
 import ru.drrey.babyname.names.domain.entity.Name
-import ru.drrey.babyname.names.domain.interactor.GetNamesWithStarsInteractor
+import ru.drrey.babyname.names.domain.interactor.GetFilteredNamesInteractor
 import ru.drrey.babyname.names.domain.interactor.SetStarsInteractor
 
 class NamesViewModel(
-    private val getNamesWithStarsInteractor: GetNamesWithStarsInteractor,
+    private val getFilteredNamesInteractor: GetFilteredNamesInteractor,
     private val setStarsInteractor: SetStarsInteractor
 ) : ViewModel(), StateViewModel<NamesViewState, NamesViewEvent> {
 
@@ -27,7 +27,7 @@ class NamesViewModel(
 
     fun loadNames() {
         act(NamesStateAction.NamesLoading)
-        getNamesWithStarsInteractor.execute(
+        getFilteredNamesInteractor.execute(
             viewModelScope,
             null,
             onError = { act(NamesStateAction.NamesLoadError(it.message ?: "")) }) {

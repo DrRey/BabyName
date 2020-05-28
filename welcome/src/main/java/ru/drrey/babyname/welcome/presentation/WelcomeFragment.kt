@@ -12,7 +12,6 @@ import ru.drrey.babyname.names.api.Sex
 import ru.drrey.babyname.navigation.AddPartnerFlow
 import ru.drrey.babyname.navigation.AuthFlow
 import ru.drrey.babyname.navigation.PartnersQrCodeFlow
-import ru.drrey.babyname.theme.api.ThemeViewState
 import ru.drrey.babyname.theme.api.ThemedFragment
 import ru.drrey.babyname.welcome.R
 
@@ -72,10 +71,6 @@ class WelcomeFragment : ThemedFragment() {
             actOnEvent(it)
         })
         viewModel.startWelcome()
-    }
-
-    override fun renderTheme(themeViewState: ThemeViewState) {
-
     }
 
     private fun renderState(viewState: WelcomeViewState) {

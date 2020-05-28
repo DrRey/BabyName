@@ -36,9 +36,6 @@ class PartnersQrCodeFragment : ThemedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        themeViewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
-            renderTheme(it)
-        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })

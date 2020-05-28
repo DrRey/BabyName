@@ -2,6 +2,7 @@
 <resources>
     <string name="logged_in">Вход выполнен</string>
     <string name="login">Войти</string>
+    <string name="names_unfiltered">Осталось отфильтровать имён: %1$d</string>
     <string name="names_starred">Имён оценено: %1$d</string>
     <string name="partners">Партнёров: %1$d</string>
     <string name="add_partner">Добавить партнёра</string>

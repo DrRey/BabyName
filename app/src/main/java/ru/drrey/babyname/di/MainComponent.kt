@@ -37,7 +37,8 @@ object MainComponent : FeatureComponent<MainDependencies>() {
                     partnersApi.clearPartnersInteractor(),
                     namesApi.getSexFilterInteractor(),
                     namesApi.setSexFilterInteractor(),
-                    namesApi.countStarredNamesInteractor()
+                    namesApi.countStarredNamesInteractor(),
+                    namesApi.countUnfilteredNamesInteractor()
                 )
             }
         }
