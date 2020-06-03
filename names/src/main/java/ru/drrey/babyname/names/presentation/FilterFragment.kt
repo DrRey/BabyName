@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.fragment_filter.*
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
 import ru.drrey.babyname.names.R
-import ru.drrey.babyname.names.api.Sex
-import ru.drrey.babyname.theme.api.ThemeViewState
+import ru.drrey.babyname.names.domain.entity.Name
 import ru.drrey.babyname.theme.api.ThemedFragment
 
 class FilterFragment : ThemedFragment() {
@@ -33,15 +31,14 @@ class FilterFragment : ThemedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        yesView?.apply {
-            text = getString(R.string.yes)
-            setOnClickListener { viewModel.onNameFiltered(true) }
-        }
-        noView?.apply {
-            text = getString(R.string.no)
-            setOnClickListener { viewModel.onNameFiltered(false) }
-        }
-
+        viewModel.getNamesList().observe(viewLifecycleOwner, NonNullObserver {
+            viewPager.apply {
+                adapter =
+                    FilterPagerAdapter(it, viewModel.getNamesMap()) { name: Name, allow: Boolean ->
+                        viewModel.onNameFiltered(name, allow)
+                    }
+            }
+        })
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
@@ -51,25 +48,12 @@ class FilterFragment : ThemedFragment() {
         viewModel.loadNames()
     }
 
-    override fun renderTheme(themeViewState: ThemeViewState) {
-        themeViewState.accentColorResId?.let {
-        }
-    }
-
     private fun renderState(viewState: FilterViewState) {
-        if (viewState.currentName != null) {
-            textView?.apply {
-                setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        if (viewState.currentName.sex == Sex.BOY) R.color.blue else R.color.pink
-                    )
-                )
-                text = viewState.currentName.displayName
-            }
-            contentLayout?.visibility = View.VISIBLE
+        if (viewState.currentNamePosition != null) {
+            viewPager?.currentItem = viewState.currentNamePosition
+            viewPager?.visibility = View.VISIBLE
         } else {
-            contentLayout?.visibility = View.GONE
+            viewPager?.visibility = View.GONE
         }
     }
 
