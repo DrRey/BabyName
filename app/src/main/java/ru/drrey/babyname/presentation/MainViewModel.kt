@@ -17,7 +17,7 @@ class MainViewModel(
     private val clearPartnersInteractor: Interactor<Unit, Nothing?>,
     private val getSexFilterInteractor: Interactor<Sex?, Nothing?>,
     private val setSexFilterInteractor: Interactor<Unit, Sex?>,
-    private val getStarredNamesInteractor: Interactor<Int, Nothing?>,
+    private val countStarredNamesInteractor: Interactor<Int, Nothing?>,
     private val countUnfilteredNamesInteractor: Interactor<Int, Nothing?>
 ) : ViewModel(), StateViewModel<MainViewState, MainViewEvent> {
 
@@ -64,7 +64,7 @@ class MainViewModel(
                                 act(MainStateAction.LoadError(error.message ?: ""))
                             }) { unfilteredNamesCount ->
                             act(MainStateAction.LoadedUnfilteredNames(unfilteredNamesCount))
-                            getStarredNamesInteractor.execute(
+                            countStarredNamesInteractor.execute(
                                 viewModelScope,
                                 null,
                                 onError = { error ->

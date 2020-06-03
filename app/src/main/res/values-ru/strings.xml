@@ -8,4 +8,7 @@
     <string name="add_partner">Добавить партнёра</string>
     <string name="show_partner_qr">Показать QR-код для партнёра</string>
     <string name="results">Результаты</string>
+    <string name="filter_boy">Мальчики</string>
+    <string name="filter_girl">Девочки</string>
+    <string name="filter_all">Все</string>
 </resources>

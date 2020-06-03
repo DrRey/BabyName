@@ -1,5 +1,7 @@
 package ru.drrey.babyname.presentation
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +62,12 @@ class MainFragment : ThemedFragment() {
 
     override fun renderTheme(themeViewState: ThemeViewState) {
         viewModel.invalidateViewState()
+        themeViewState.accentColorResId?.let { accentColorResId ->
+            progressBar?.indeterminateDrawable?.colorFilter = PorterDuffColorFilter(
+                ContextCompat.getColor(requireContext(), accentColorResId),
+                PorterDuff.Mode.MULTIPLY
+            )
+        }
     }
 
     private fun renderState(viewState: MainViewState) {
@@ -82,7 +90,7 @@ class MainFragment : ThemedFragment() {
             }
             partnersView?.text = getString(R.string.partners, viewState.partnersCount)
             namesView?.apply {
-                visibility = if (viewState.isLoadingData) View.GONE else View.VISIBLE
+                visibility = if (viewState.isLoadingData) View.INVISIBLE else View.VISIBLE
                 if (viewState.unfilteredNamesCount > 0) {
                     text = getString(R.string.names_unfiltered, viewState.unfilteredNamesCount)
                     setOnClickListener { activity?.router?.startFlow(FilterFlow) }

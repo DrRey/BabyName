@@ -13,6 +13,6 @@ class CountStarredNamesInteractor(
 
     override fun buildFlow(params: Nothing?): Flow<Int> {
         return getNamesWithStarsInteractor.buildFlow(null)
-            .map { it.filter { name -> (name.stars ?: -1) >= 0 }.count() }
+            .map { it.filter { name -> (name.stars ?: 0) > 0 }.count() }
     }
 }

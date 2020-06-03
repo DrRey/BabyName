@@ -8,4 +8,7 @@
     <string name="add_partner">Add partner</string>
     <string name="show_partner_qr">Show QR code for partner</string>
     <string name="results">Results</string>
+    <string name="filter_boy">Boy</string>
+    <string name="filter_girl">Girl</string>
+    <string name="filter_all">All</string>
 </resources>
