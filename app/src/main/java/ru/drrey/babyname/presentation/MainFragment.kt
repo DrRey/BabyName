@@ -78,12 +78,10 @@ class MainFragment : ThemedFragment() {
             Toast.makeText(context, viewState.error, Toast.LENGTH_LONG).show()
         } else {
             if (viewState.isLoggedIn) {
-                authView?.apply {
-                    text = getString(R.string.logged_in)
-                    setOnClickListener(null)
-                }
+                authView?.visibility = View.GONE
             } else {
                 authView?.apply {
+                    visibility = View.VISIBLE
                     text = getString(R.string.login)
                     setOnClickListener { activity?.router?.startFlow(AuthFlow) }
                 }
