@@ -27,7 +27,7 @@ interface StateViewModel<T : ViewState, Z : ViewEvent> {
     fun act(action: Action) {
         eventActors.forEach { actor ->
             actor(action)?.let {
-                if (Looper.myLooper() == Looper.getMainLooper()) {
+                if (isMainThread()) {
                     viewEvent.value = it
                 } else {
                     viewEvent.postValue(it)
@@ -37,13 +37,15 @@ interface StateViewModel<T : ViewState, Z : ViewEvent> {
 
         val newState = reduce(viewState.value ?: initialViewState, action)
         if (newState != viewState.value) {
-            if (Looper.myLooper() == Looper.getMainLooper()) {
+            if (isMainThread()) {
                 viewState.value = newState
             } else {
                 viewState.postValue(newState)
             }
         }
     }
+
+    fun isMainThread() = Looper.myLooper() == Looper.getMainLooper()
 
     private fun reduce(currentState: T, action: Action): T {
         var newState = currentState

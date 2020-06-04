@@ -56,7 +56,7 @@ class ThemeViewModel(
             act(ThemeStateAction.PrimaryColorChanged(it ?: R.color.colorPrimary))
         }
         getAccentColorInteractor.execute(viewModelScope, null, onError = {
-            act(ThemeStateAction.PrimaryColorChanged(R.color.colorAccent))
+            act(ThemeStateAction.AccentColorChanged(R.color.colorAccent))
         }) {
             act(ThemeStateAction.AccentColorChanged(it ?: R.color.colorAccent))
         }
