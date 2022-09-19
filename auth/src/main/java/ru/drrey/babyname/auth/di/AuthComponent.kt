@@ -1,7 +1,7 @@
 package ru.drrey.babyname.auth.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.get
+import org.koin.core.component.get
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.auth.data.AuthRepositoryImpl

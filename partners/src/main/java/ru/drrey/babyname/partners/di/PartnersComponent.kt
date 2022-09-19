@@ -3,7 +3,7 @@ package ru.drrey.babyname.partners.di
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.get
+import org.koin.core.component.get
 import org.koin.dsl.module
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.common.di.FeatureComponent

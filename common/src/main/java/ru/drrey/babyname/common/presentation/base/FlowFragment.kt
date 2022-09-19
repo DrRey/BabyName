@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.github.terrakok.cicerone.Screen
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import ru.drrey.babyname.common.R
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.navigation.AppNavigator
-import ru.terrakok.cicerone.Screen
-import ru.terrakok.cicerone.commands.Command
 import kotlin.reflect.KClass
 
 
@@ -31,16 +31,16 @@ abstract class FlowFragment : RouterFragment() {
     override fun initNavigator() =
         object : AppNavigator(activity!!, childFragmentManager, R.id.fragmentHolder) {
             override fun setupFragmentTransaction(
-                command: Command,
+                screen: FragmentScreen,
+                fragmentTransaction: FragmentTransaction,
                 currentFragment: Fragment?,
-                nextFragment: Fragment?,
-                fragmentTransaction: FragmentTransaction
+                nextFragment: Fragment
             ) {
                 super.setupFragmentTransaction(
-                    command,
+                    screen,
+                    fragmentTransaction,
                     currentFragment,
-                    nextFragment,
-                    fragmentTransaction
+                    nextFragment
                 )
                 if (currentFragment == null && nextFragment != null) {
                     //removing animation for first fragment. Delay is needed, because child fragments disappear during parent fragment pop animation

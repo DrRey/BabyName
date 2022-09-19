@@ -1,13 +1,14 @@
 package ru.drrey.babyname.welcome.navigation
 
+import androidx.fragment.app.FragmentFactory
 import ru.drrey.babyname.welcome.presentation.WelcomeFlowFragment
 import ru.drrey.babyname.welcome.presentation.WelcomeFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 
-class WelcomeScreen : SupportAppScreen() {
-    override fun getFragment() = WelcomeFlowFragment()
+class WelcomeScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = WelcomeFlowFragment()
 }
 
-class WelcomeFragmentScreen : SupportAppScreen() {
-    override fun getFragment() = WelcomeFragment()
+class WelcomeFragmentScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = WelcomeFragment()
 }

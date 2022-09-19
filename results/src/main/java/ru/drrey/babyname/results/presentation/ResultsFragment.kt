@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_results.*
 import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
@@ -21,7 +20,7 @@ class ResultsFragment : ThemedFragment() {
         fun newInstance() = ResultsFragment()
     }
 
-    private val resultsAdapter = GroupAdapter<ViewHolder>()
+    private val resultsAdapter = GroupieAdapter()
     private val resultsSection = Section()
     private val viewModel: ResultsViewModel by sharedParentViewModel()
 

@@ -1,6 +1,6 @@
 package ru.drrey.babyname.common.di
 
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module

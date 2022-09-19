@@ -18,7 +18,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 db.collection("partners_$userId").document(partner.id).delete()
                     .addOnSuccessListener {
                         if (isActive) {
-                            offer(Unit)
+                            this.trySend(Unit).isSuccess
                         }
                         close()
                     }
@@ -31,7 +31,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     db.collection("partners_${partner.id}").document(userId).delete()
                         .addOnSuccessListener {
                             if (isActive) {
-                                offer(Unit)
+                                this.trySend(Unit).isSuccess
                             }
                             close()
                         }
@@ -48,7 +48,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
             db.collection("partners_$userId").document(partnerId).set(Partner(partnerId))
                 .addOnSuccessListener {
                     if (isActive) {
-                        offer(Unit)
+                        this.trySend(Unit).isSuccess
                     }
                     close()
                 }
@@ -61,7 +61,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                 db.collection("partners_$partnerId").document(userId).set(Partner(userId))
                     .addOnSuccessListener {
                         if (isActive) {
-                            offer(Unit)
+                            trySend(Unit).isSuccess
                         }
                         close()
                     }
@@ -77,7 +77,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
             .addOnSuccessListener { partners ->
                 try {
                     if (isActive) {
-                        offer(partners.toObjects(Partner::class.java).toList())
+                        trySend(partners.toObjects(Partner::class.java).toList()).isSuccess
                     }
                     close()
                 } catch (t: Throwable) {
@@ -86,7 +86,7 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
             }
             .addOnFailureListener {
                 if (isActive) {
-                    offer(emptyList())
+                    trySend(emptyList()).isSuccess
                 }
                 close()
             }
@@ -100,12 +100,12 @@ class PartnersRepositoryImpl(private val db: FirebaseFirestore) : PartnersReposi
                     .addOnSuccessListener { stars ->
                         try {
                             if (isActive) {
-                                offer(
+                                trySend(
                                     Pair(
                                         partnerId,
                                         stars.toObjects(NameStars::class.java).toList()
                                     )
-                                )
+                                ).isSuccess
                             }
                             close()
                         } catch (t: Throwable) {

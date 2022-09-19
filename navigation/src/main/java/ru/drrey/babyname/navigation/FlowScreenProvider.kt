@@ -1,6 +1,6 @@
 package ru.drrey.babyname.navigation
 
-import ru.terrakok.cicerone.Screen
+import com.github.terrakok.cicerone.Screen
 
 interface FlowScreenProvider
 

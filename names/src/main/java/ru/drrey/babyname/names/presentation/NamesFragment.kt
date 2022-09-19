@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.fragment_names.*
-import ru.drrey.babyname.common.presentation.VerticalSpaceDivider
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
-import ru.drrey.babyname.names.R
+import ru.drrey.babyname.names.domain.entity.Name
 import ru.drrey.babyname.theme.api.ThemeViewState
 import ru.drrey.babyname.theme.api.ThemedFragment
 
@@ -23,27 +25,73 @@ class NamesFragment : ThemedFragment() {
         fun newInstance() = NamesFragment()
     }
 
-    private val namesAdapter = GroupAdapter<ViewHolder>()
-    private val namesSection = Section()
     private val viewModel: NamesViewModel by sharedParentViewModel()
+
+    private val composeView by lazy { ComposeView(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_names, container, false)
+        return composeView.apply {
+            setContent { NamesList(emptyList()) }
+        }
+    }
+
+    @Composable
+    private fun NamesList(names: List<Name>) {
+        composeView.setContent {
+            LazyColumn {
+                names.map {
+                    item {
+                        NameRow(name = it)
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun NameRow(name: Name) {
+        Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = name.displayName, fontSize = 16.sp)
+            Row {
+                Text(
+                    text = "1", modifier = Modifier
+                        .width(48.dp)
+                        .height(IntrinsicSize.Max)
+                        .padding(horizontal = 8.dp)
+                )
+                Text(
+                    text = "2", modifier = Modifier
+                        .width(48.dp)
+                        .height(IntrinsicSize.Max)
+                        .padding(horizontal = 8.dp)
+                )
+                Text(
+                    text = "3", modifier = Modifier
+                        .width(48.dp)
+                        .height(IntrinsicSize.Max)
+                        .padding(horizontal = 8.dp)
+                )
+                Text(
+                    text = "4", modifier = Modifier
+                        .width(48.dp)
+                        .height(IntrinsicSize.Max)
+                        .padding(horizontal = 8.dp)
+                )
+                Text(
+                    text = "5", modifier = Modifier
+                        .width(48.dp)
+                        .height(IntrinsicSize.Max)
+                        .padding(horizontal = 8.dp)
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView?.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = namesAdapter
-            addItemDecoration(VerticalSpaceDivider(context))
-        }
-        namesAdapter.add(namesSection)
-
         viewModel.getViewState().observe(viewLifecycleOwner, NonNullObserver {
             renderState(it)
         })
@@ -54,20 +102,14 @@ class NamesFragment : ThemedFragment() {
     }
 
     override fun renderTheme(themeViewState: ThemeViewState) {
-        namesSection.notifyChanged()
+        composeView.invalidate()
     }
 
     private fun renderState(viewState: NamesViewState) {
         if (viewState.loadError != null) {
-            namesSection.update(emptyList())
+            composeView.setContent { NamesList(emptyList()) }
         } else {
-            viewState.names?.let {
-                namesSection.update(it.map { name ->
-                    NameItem(name, themeViewModel) { starredName, position, stars ->
-                        viewModel.setStars(starredName, position, stars)
-                    }
-                })
-            }
+            composeView.setContent { NamesList(viewState.names ?: emptyList()) }
         }
     }
 

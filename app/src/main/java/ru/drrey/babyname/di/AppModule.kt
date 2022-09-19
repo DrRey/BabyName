@@ -1,6 +1,7 @@
 package ru.drrey.babyname.di
 
 import android.preference.PreferenceManager
+import com.github.terrakok.cicerone.Cicerone
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.context.loadKoinModules
 import org.koin.core.parameter.parametersOf
@@ -10,7 +11,6 @@ import ru.drrey.babyname.FeatureStarter
 import ru.drrey.babyname.navigation.LocalCiceroneHolder
 import ru.drrey.babyname.navigation.Router
 import ru.drrey.babyname.navigationmediator.FeatureProvider
-import ru.terrakok.cicerone.Cicerone
 
 object AppComponent {
     fun init() = loadKoinModules(

@@ -1,7 +1,7 @@
 package ru.drrey.babyname
 
-import org.koin.core.KoinComponent
-import org.koin.core.get
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import ru.drrey.babyname.auth.api.AuthApi
 import ru.drrey.babyname.auth.di.AuthComponent

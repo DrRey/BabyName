@@ -16,4 +16,6 @@ Retrofit
 
 Koin 2.0
 
+Jetpack Compose
+
 ..и много других страшных слов

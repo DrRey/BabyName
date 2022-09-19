@@ -1,6 +1,6 @@
 package ru.drrey.babyname.navigation
 
-import ru.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.Router
 import kotlin.reflect.KClass
 
 class Router(private val navigationMediator: NavigationMediator) : Router() {

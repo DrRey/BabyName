@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.github.terrakok.cicerone.Cicerone
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.drrey.babyname.common.R
@@ -12,7 +13,6 @@ import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.navigation.AppNavigator
 import ru.drrey.babyname.navigation.Router
 import ru.drrey.babyname.navigation.RouterProvider
-import ru.terrakok.cicerone.Cicerone
 import kotlin.reflect.KClass
 
 abstract class BaseActivity : FragmentActivity(), RouterProvider {
@@ -33,11 +33,11 @@ abstract class BaseActivity : FragmentActivity(), RouterProvider {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        cicerone.navigatorHolder.setNavigator(navigator)
+        cicerone.getNavigatorHolder().setNavigator(navigator)
     }
 
     override fun onPause() {
-        cicerone.navigatorHolder.removeNavigator()
+        cicerone.getNavigatorHolder().removeNavigator()
         super.onPause()
     }
 

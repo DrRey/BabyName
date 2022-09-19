@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import org.koin.androidx.viewmodel.ViewModelStoreOwnerDefinition
+import org.koin.androidx.viewmodel.ViewModelStoreOwnerProducer
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
@@ -77,13 +77,13 @@ fun Float.toPx(ctx: Context): Float =
  * Lazy getByClass a viewModel instance shared with parentFragment (if present) or Activity
  *
  * @param qualifier - Koin BeanDefinition qualifier (if have several ViewModel beanDefinition of the same type)
- * @param from - ViewModelStoreOwner that will store the viewModel instance. Examples: "parentFragment", "activity". Default: "parentFragment ?: activity"
+ * @param owner - ViewModelStoreOwner that will store the viewModel instance. Examples: "parentFragment", "activity". Default: "parentFragment ?: activity"
  * @param parameters - parameters to pass to the BeanDefinition
  */
 inline fun <reified T : ViewModel> Fragment.sharedParentViewModel(
     qualifier: Qualifier? = null,
-    noinline from: ViewModelStoreOwnerDefinition = {
+    noinline owner: ViewModelStoreOwnerProducer = {
         parentFragment ?: (activity as ViewModelStoreOwner)
     },
     noinline parameters: ParametersDefinition? = null
-): Lazy<T> = kotlin.lazy { getSharedViewModel<T>(qualifier, from, parameters) }
+): Lazy<T> = lazy { getSharedViewModel(qualifier, owner, parameters) }

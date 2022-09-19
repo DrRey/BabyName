@@ -1,7 +1,7 @@
 package ru.drrey.babyname.navigationmediator
 
+import com.github.terrakok.cicerone.Screen
 import ru.drrey.babyname.navigation.*
-import ru.terrakok.cicerone.Screen
 import kotlin.reflect.KClass
 
 class NavigationMediatorImpl(private val featureProvider: FeatureProvider) : NavigationMediator {

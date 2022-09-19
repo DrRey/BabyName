@@ -1,13 +1,14 @@
 package ru.drrey.babyname.auth.navigation
 
+import androidx.fragment.app.FragmentFactory
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import ru.drrey.babyname.auth.presentation.AuthFlowFragment
 import ru.drrey.babyname.auth.presentation.AuthFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class AuthScreen : SupportAppScreen() {
-    override fun getFragment() = AuthFlowFragment()
+class AuthScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = AuthFlowFragment()
 }
 
-class AuthFragmentScreen : SupportAppScreen() {
-    override fun getFragment() = AuthFragment.newInstance()
+class AuthFragmentScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = AuthFragment.newInstance()
 }

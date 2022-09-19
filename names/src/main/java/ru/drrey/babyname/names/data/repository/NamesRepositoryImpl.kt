@@ -16,7 +16,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             .addOnSuccessListener { names ->
                 try {
                     if (isActive) {
-                        offer(names.toObjects(Name::class.java)
+                        trySend(names.toObjects(Name::class.java)
                             .filter { (it.stars ?: 0) >= 0 })
                     }
                     close()
@@ -34,7 +34,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             .addOnSuccessListener { stars ->
                 try {
                     if (isActive) {
-                        offer(stars.toObjects(NameStars::class.java).toList())
+                        trySend(stars.toObjects(NameStars::class.java).toList()).isSuccess
                     }
                     close()
                 } catch (e: Exception) {
@@ -54,7 +54,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             )
         ).addOnCompleteListener {
             if (isActive) {
-                offer(Unit)
+                trySend(Unit).isSuccess
             }
             close()
         }.addOnFailureListener {
@@ -67,11 +67,10 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
         db.collection("filters_$userId").document("sex").get()
             .addOnSuccessListener { doc ->
                 if (isActive) {
-                    offer(
-                        doc.get("sex")
-                            ?.takeIf { it.toString().isNotEmpty() }
-                            ?.let { Sex.valueOf(it.toString()) }
-                    )
+                    trySend(doc.get("sex")
+                        ?.takeIf { it.toString().isNotEmpty() }
+                        ?.let { Sex.valueOf(it.toString()) }
+                    ).isSuccess
                 }
                 close()
             }.addOnFailureListener {
@@ -85,7 +84,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
             mapOf(Pair("sex", sex?.toString() ?: ""))
         ).addOnCompleteListener {
             if (isActive) {
-                offer(Unit)
+                trySend(Unit).isSuccess
             }
             close()
         }.addOnFailureListener {
@@ -103,7 +102,7 @@ class NamesRepositoryImpl(private val db: FirebaseFirestore) : NamesRepository {
                 )
             ).addOnCompleteListener {
                 if (isActive) {
-                    offer(Unit)
+                    trySend(Unit).isSuccess
                 }
                 close()
             }.addOnFailureListener {

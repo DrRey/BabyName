@@ -1,23 +1,24 @@
 package ru.drrey.babyname.names.navigation
 
+import androidx.fragment.app.FragmentFactory
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import ru.drrey.babyname.names.presentation.FilterFlowFragment
 import ru.drrey.babyname.names.presentation.FilterFragment
 import ru.drrey.babyname.names.presentation.NamesFlowFragment
 import ru.drrey.babyname.names.presentation.NamesFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class NamesFragmentScreen : SupportAppScreen() {
-    override fun getFragment() = NamesFragment.newInstance()
+class NamesFragmentScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = NamesFragment.newInstance()
 }
 
-class NamesScreen : SupportAppScreen() {
-    override fun getFragment() = NamesFlowFragment()
+class NamesScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = NamesFlowFragment()
 }
 
-class FilterFragmentScreen : SupportAppScreen() {
-    override fun getFragment() = FilterFragment.newInstance()
+class FilterFragmentScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = FilterFragment.newInstance()
 }
 
-class FilterScreen : SupportAppScreen() {
-    override fun getFragment() = FilterFlowFragment()
+class FilterScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = FilterFlowFragment()
 }

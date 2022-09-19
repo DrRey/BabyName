@@ -70,7 +70,7 @@ class PartnersQrCodeFragment : ThemedFragment() {
         } else {
             val qrgEncoder = QRGEncoder(userId, null, QRGContents.Type.TEXT, qrCodeView.width)
             try {
-                val bitmap = qrgEncoder.encodeAsBitmap()
+                val bitmap = qrgEncoder.bitmap
                 qrCodeView.setImageBitmap(bitmap)
             } catch (e: WriterException) {
 

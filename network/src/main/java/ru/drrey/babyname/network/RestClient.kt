@@ -9,21 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Rest client
  */
 class RestClient {
-    val nameService: NameApi
+    private val nameService: NameApi
 
     //client
     init {
-        val gson = GsonBuilder()
-            // .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
-            // .setLenient()
-            .create()
-
-        val client = OkHttpClient()
-        client.followRedirects()
-
+        val gson = GsonBuilder().create()
+        val client = OkHttpClient.Builder().followRedirects(true).build()
         val retrofit = Retrofit.Builder()
             .client(client)
-            // .baseUrl(GoodGameApp.getContext().getString(R.string.gg_api_url))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 

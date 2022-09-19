@@ -1,13 +1,14 @@
 package ru.drrey.babyname.results.navigation
 
+import androidx.fragment.app.FragmentFactory
 import ru.drrey.babyname.results.presentation.ResultsFlowFragment
 import ru.drrey.babyname.results.presentation.ResultsFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 
-class ResultsFragmentScreen : SupportAppScreen() {
-    override fun getFragment() = ResultsFragment.newInstance()
+class ResultsFragmentScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = ResultsFragment.newInstance()
 }
 
-class ResultsScreen : SupportAppScreen() {
-    override fun getFragment() = ResultsFlowFragment()
+class ResultsScreen : FragmentScreen {
+    override fun createFragment(factory: FragmentFactory) = ResultsFlowFragment()
 }

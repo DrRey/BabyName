@@ -1,12 +1,12 @@
 package ru.drrey.babyname.common.presentation.base
 
 import androidx.fragment.app.Fragment
+import com.github.terrakok.cicerone.Cicerone
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.drrey.babyname.navigation.AppNavigator
 import ru.drrey.babyname.navigation.Router
 import ru.drrey.babyname.navigation.RouterProvider
-import ru.terrakok.cicerone.Cicerone
 
 abstract class RouterFragment : Fragment(), RouterProvider {
     override val router: Router by lazy { cicerone.router }
@@ -18,11 +18,11 @@ abstract class RouterFragment : Fragment(), RouterProvider {
 
     override fun onResume() {
         super.onResume()
-        cicerone.navigatorHolder.setNavigator(navigator)
+        cicerone.getNavigatorHolder().setNavigator(navigator)
     }
 
     override fun onPause() {
-        cicerone.navigatorHolder.removeNavigator()
+        cicerone.getNavigatorHolder().removeNavigator()
         super.onPause()
     }
 }

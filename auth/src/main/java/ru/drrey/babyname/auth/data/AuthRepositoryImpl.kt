@@ -15,7 +15,7 @@ class AuthRepositoryImpl(private val sharedPreferences: SharedPreferences) : Aut
     override fun setUserId(userId: String): Flow<Unit> = callbackFlow {
         sharedPreferences.edit().putString(PREFS_USER_ID, userId).apply()
         if (isActive) {
-            offer(Unit)
+            trySend(Unit)
         }
         close()
         awaitClose()

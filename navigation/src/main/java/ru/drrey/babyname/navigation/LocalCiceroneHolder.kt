@@ -1,9 +1,8 @@
 package ru.drrey.babyname.navigation
 
-import org.koin.core.KoinComponent
-import org.koin.core.get
-import ru.terrakok.cicerone.Cicerone
-import java.util.*
+import com.github.terrakok.cicerone.Cicerone
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 object LocalCiceroneHolder : KoinComponent {
     private val containers: HashMap<String, Cicerone<Router>> = HashMap()

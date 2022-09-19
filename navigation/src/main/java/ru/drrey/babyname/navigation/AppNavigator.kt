@@ -4,68 +4,43 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.android.support.SupportAppScreen
-import ru.terrakok.cicerone.commands.BackTo
-import ru.terrakok.cicerone.commands.Command
-import ru.terrakok.cicerone.commands.Forward
+import com.github.terrakok.cicerone.BackTo
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 
 open class AppNavigator(
     activity: FragmentActivity,
     fragmentManager: FragmentManager,
     containerId: Int
-) :
-    SupportAppNavigator(activity, fragmentManager, containerId) {
-    override fun fragmentForward(command: Forward) {
-        val screen = command.screen as SupportAppScreen
+) : com.github.terrakok.cicerone.androidx.AppNavigator(activity, containerId, fragmentManager) {
+
+    override fun commitNewFragmentScreen(screen: FragmentScreen, addToBackStack: Boolean) {
         val currentFragment = fragmentManager.findFragmentById(containerId)
-
-        val fragmentParams = screen.fragmentParams
-        val fragment = if (fragmentParams == null) createFragment(screen) else null
-
-        val fragmentTransaction: FragmentTransaction =
-            fragmentManager.beginTransaction()
-
+        val fragment = screen.createFragment(fragmentFactory)
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setReorderingAllowed(true)
         setupFragmentTransaction(
-            command,
-            currentFragment,
-            fragment,
-            fragmentTransaction
+            screen,
+            transaction,
+            fragmentManager.findFragmentById(containerId),
+            fragment
         )
-
-        if (shouldAddFragment(currentFragment, fragment)) {
-            if (fragmentParams != null) {
-                fragmentTransaction.add(
-                    containerId,
-                    fragmentParams.fragmentClass,
-                    fragmentParams.arguments
-                )
-            } else {
-                fragmentTransaction.add(containerId, fragment!!)
-            }
+        if (!shouldAddFragment(currentFragment, fragment)) {
+            transaction.replace(containerId, fragment, screen.screenKey)
         } else {
-            if (fragmentParams != null) {
-                fragmentTransaction.replace(
-                    containerId,
-                    fragmentParams.fragmentClass,
-                    fragmentParams.arguments
-                )
-            } else {
-                fragmentTransaction.replace(containerId, fragment!!)
-            }
+            transaction.add(containerId, fragment, screen.screenKey)
         }
-
-        fragmentTransaction
-            .addToBackStack(screen.screenKey)
-            .commit()
-        localStackCopy.add(screen.screenKey)
+        if (addToBackStack) {
+            transaction.addToBackStack(screen.screenKey)
+            localStackCopy.add(screen.screenKey)
+        }
+        transaction.commit()
     }
 
     override fun setupFragmentTransaction(
-        command: Command,
+        screen: FragmentScreen,
+        fragmentTransaction: FragmentTransaction,
         currentFragment: Fragment?,
-        nextFragment: Fragment?,
-        fragmentTransaction: FragmentTransaction
+        nextFragment: Fragment
     ) {
         //not doing animations if first fragment in container
         if (currentFragment == null) {
@@ -93,7 +68,8 @@ open class AppNavigator(
                 (fragment is TertiaryNavigationFragment && currentFragment !is TertiaryNavigationFragment && currentFragment !is QuaternaryNavigationFragment) ||
                 (fragment is QuaternaryNavigationFragment && currentFragment !is QuaternaryNavigationFragment)
 
-    override fun fragmentBack() {
+
+    override fun back() {
         if (localStackCopy.size == 1 && fragmentManager.findFragmentById(containerId)?.parentFragment == null) {
             //not removing last fragment in activity. Exiting activity instead
             localStackCopy.removeLast()
