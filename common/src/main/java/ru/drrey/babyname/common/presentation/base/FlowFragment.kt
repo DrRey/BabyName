@@ -26,7 +26,7 @@ abstract class FlowFragment : RouterFragment() {
 
     protected open val featureDependencies: List<KClass<*>> = emptyList()
 
-    abstract fun getFlowScreen(): Screen
+    abstract fun getFlowScreen(): Screen?
 
     override fun initNavigator() =
         object : AppNavigator(activity!!, childFragmentManager, R.id.fragmentHolder) {
@@ -42,7 +42,7 @@ abstract class FlowFragment : RouterFragment() {
                     currentFragment,
                     nextFragment
                 )
-                if (currentFragment == null && nextFragment != null) {
+                if (currentFragment == null) {
                     //removing animation for first fragment. Delay is needed, because child fragments disappear during parent fragment pop animation
                     fragmentTransaction.setCustomAnimations(
                         R.anim.delay_medium,
@@ -58,7 +58,7 @@ abstract class FlowFragment : RouterFragment() {
                 nextFragment: Fragment?
             ) {
                 if (nextFragment == null) {
-                    parentFragment?.router?.exit() ?: activity?.router?.exit()
+                    parentFragment?.router?.exit() ?: activity.router?.exit()
                 }
             }
         }
@@ -84,7 +84,7 @@ abstract class FlowFragment : RouterFragment() {
 
     protected open fun initFlow() {
         if (childFragmentManager.fragments.isEmpty()) {
-            router.navigateTo(getFlowScreen())
+            getFlowScreen()?.let { router.navigateTo(it) }
         }
     }
 
