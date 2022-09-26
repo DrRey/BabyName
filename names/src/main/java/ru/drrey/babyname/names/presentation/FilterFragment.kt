@@ -3,36 +3,30 @@ package ru.drrey.babyname.names.presentation
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_filter.*
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
 import ru.drrey.babyname.common.presentation.router
 import ru.drrey.babyname.common.presentation.sharedParentViewModel
-import ru.drrey.babyname.names.R
+import ru.drrey.babyname.names.databinding.FragmentFilterBinding
 import ru.drrey.babyname.names.domain.entity.Name
-import ru.drrey.babyname.theme.api.ThemedFragment
+import ru.drrey.babyname.theme.api.ThemedBindingFragment
 
-class FilterFragment : ThemedFragment() {
+class FilterFragment : ThemedBindingFragment<FragmentFilterBinding>() {
 
     companion object {
         fun newInstance() = FilterFragment()
     }
 
-    private val viewModel: FilterViewModel by sharedParentViewModel()
+    override val viewBinder: (LayoutInflater) -> FragmentFilterBinding =
+        { FragmentFilterBinding.inflate(it) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_filter, container, false)
-    }
+    private val viewModel: FilterViewModel by sharedParentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getNamesList().observe(viewLifecycleOwner, NonNullObserver {
-            viewPager.apply {
+            viewBinding?.viewPager?.apply {
                 adapter =
                     FilterPagerAdapter(it, viewModel.getNamesMap()) { name: Name, allow: Boolean ->
                         viewModel.onNameFiltered(name, allow)
@@ -50,10 +44,10 @@ class FilterFragment : ThemedFragment() {
 
     private fun renderState(viewState: FilterViewState) {
         if (viewState.currentNamePosition != null) {
-            viewPager?.currentItem = viewState.currentNamePosition
-            viewPager?.visibility = View.VISIBLE
+            viewBinding?.viewPager?.currentItem = viewState.currentNamePosition
+            viewBinding?.viewPager?.visibility = View.VISIBLE
         } else {
-            viewPager?.visibility = View.GONE
+            viewBinding?.viewPager?.visibility = View.GONE
         }
     }
 

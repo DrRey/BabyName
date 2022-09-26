@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.PagerAdapter
-import kotlinx.android.synthetic.main.filter_pager_item.view.*
 import ru.drrey.babyname.names.R
 import ru.drrey.babyname.names.api.Sex
+import ru.drrey.babyname.names.databinding.FilterPagerItemBinding
 import ru.drrey.babyname.names.domain.entity.Name
 
 class FilterPagerAdapter(
@@ -19,34 +19,34 @@ class FilterPagerAdapter(
 
     @SuppressLint("InflateParams")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = LayoutInflater.from(container.context).inflate(R.layout.filter_pager_item, null)
         val name = names.getOrNull(position)
+        val viewBinding = FilterPagerItemBinding.inflate(LayoutInflater.from(container.context))
         name?.let {
-            view.apply {
+            viewBinding.apply {
                 val nameAccentColor = ContextCompat.getColor(
-                    context,
+                    root.context,
                     if (name.sex == Sex.BOY) R.color.blue else R.color.pink
                 )
-                textView?.apply {
+                textView.apply {
                     text = name.displayName
                     setTextColor(nameAccentColor)
                 }
-                yesView?.apply {
+                yesView.apply {
                     text = context.getString(R.string.yes)
                     setOnClickListener {
                         setBackgroundColor(nameAccentColor)
-                        view.noView?.background = null
+                        noView.background = null
                         onNameFiltered(name, true)
                     }
                     if (namesMap[name] == true) {
                         setBackgroundColor(nameAccentColor)
                     }
                 }
-                noView?.apply {
+                noView.apply {
                     text = context.getString(R.string.no)
                     setOnClickListener {
                         setBackgroundColor(nameAccentColor)
-                        view.yesView?.background = null
+                        yesView.background = null
                         onNameFiltered(name, false)
                     }
                     if (namesMap[name] == false) {
@@ -55,8 +55,8 @@ class FilterPagerAdapter(
                 }
             }
         }
-        container.addView(view)
-        return view
+        container.addView(viewBinding.root)
+        return viewBinding.root
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {

@@ -2,23 +2,24 @@ package ru.drrey.babyname.common.presentation
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
-import kotlinx.android.synthetic.main.view_button.view.*
-import ru.drrey.babyname.common.R
+import ru.drrey.babyname.common.databinding.ViewButtonBinding
 
 class ButtonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    private var viewBinding: ViewButtonBinding
+
     init {
-        View.inflate(context, R.layout.view_button, this)
+        viewBinding = ViewButtonBinding.inflate(LayoutInflater.from(context), this)
     }
 
     var text: String
-        get() = textView?.text?.toString() ?: ""
+        get() = viewBinding.textView.text?.toString() ?: ""
         set(value) {
-            textView?.text = value
+            viewBinding.textView.text = value
         }
 }
