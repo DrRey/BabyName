@@ -6,7 +6,10 @@ import ru.drrey.babyname.common.domain.interactor.base.Interactor
 import ru.drrey.babyname.results.domain.entity.Result
 
 /**
- * Get results interactor
+ * Get results interactor. Results are calculated as follows:
+ * 1) If all partners banned the name - the name is not shown
+ * 2) If some partners banned the name - the ban is calculated as 0 stars
+ * 3) If the name is not banned but is not yet rated - the result is unaffected
  */
 class GetResultsInteractor(
     private val getUserId: () -> Flow<String>,
@@ -24,21 +27,29 @@ class GetResultsInteractor(
                             getPartnersStars(partners).onStart { emit(Pair(userId, stars)) }
                                 .toList()
                                 .associateBy({ it.first }, { it.second })
-                                .values.asSequence() //getting just the values sequence -> Collection<List<NameStars>>
-                                .flatten() //getting the whole list of stars -> List<NameStars>
-                                .filter { (it.stars ?: 0) >= 0 } //removing filtered names
-                                .groupBy(  //grouping by name and stars -> Map<String, List<Int>>
+                                .values.asSequence() //getting just the values sequence
+                                .flatten() //getting the whole list of stars
+                                .groupBy(  //grouping by name and stars
                                     { nameStars -> nameStars.name },
                                     { nameStars ->
-                                        nameStars.stars ?: 0
+                                        nameStars.stars ?: -1
                                     })
-                                .mapValues { it.value.average() } //mapping values to average -> Map<String, Double>
-                                .map {
+                                .filterNot { //removing names filtered by all partners
+                                    it.value.all { stars -> stars == -1 }
+                                }
+                                .mapValues { //removing unset stars
+                                    it.value.filter { stars -> stars != 0 }
+                                }
+                                .mapValues { //setting filtered names as 0 stars
+                                    it.value.map { stars -> if (stars < 0) 0 else stars }
+                                }
+                                .mapValues { it.value.average() } //mapping values to average
+                                .map { //mapping to results list
                                     Result(
                                         it.key,
                                         it.value.toFloat()
                                     )
-                                } //mapping to results list -> List<Results>
+                                }
                                 .sortedByDescending { it.averageStars } //sorting
                         )
                     }
