@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.drrey.babyname.common.presentation.base.NonNullObserver
@@ -58,35 +59,40 @@ class NamesFragment : ThemedFragment() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .height(48.dp)
+                .height(48.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = name.displayName,
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+                    maxLines = 2,
+                    modifier = Modifier.padding(start = 16.dp),
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .wrapContentWidth()
                     .fillMaxHeight()
             ) {
-                nameRateButton(name, position, 1)
-                nameRateButton(name, position, 2)
-                nameRateButton(name, position, 3)
-                nameRateButton(name, position, 4)
-                nameRateButton(name, position, 5)
+                nameRateButton(name, position, String(Character.toChars(0x1F621)), 1)
+                nameRateButton(name, position, String(Character.toChars(0x1F616)), 2)
+                nameRateButton(name, position, String(Character.toChars(0x1F614)), 3)
+                nameRateButton(name, position, String(Character.toChars(0x1F60A)), 4)
+                nameRateButton(name, position, String(Character.toChars(0x1F60D)), 5)
             }
         }
     }
 
     @Composable
-    private fun nameRateButton(name: Name, position: Int, value: Int) {
+    private fun nameRateButton(name: Name, position: Int, text: String, value: Int) {
         val activeColor = colorResource(themeViewModel.accentColorResId ?: R.color.transparent)
         val inactiveColor = colorResource(R.color.grey)
         val backgroundColor = if (name.stars == value) activeColor else inactiveColor
@@ -102,7 +108,10 @@ class NamesFragment : ThemedFragment() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(value.toString())
+            Text(
+                text = text,
+                fontSize = 24.sp
+            )
         }
     }
 
